@@ -1,0 +1,31 @@
+package quarkus.extensions.combinator;
+
+public enum Configuration {
+    ONLY_SUPPORTED_EXTENSIONS("ts.only-supported-extensions", "true"),
+    GROUP_OF("ts.extensions-in-groups-of", "3"),
+    EXTENSIONS_ENDPOINT("ts.quarkus-extensions-endpoint", "https://code.quarkus.redhat.com/api/extensions"),
+    COMBINATION_PROJECT_GROUP_ID("ts.combination-project-group-id", "io.quarkus.qe"),
+    COMBINATION_PROJECT_VERSION("ts.combination-project-version", "1.0.0-SNAPSHOT"),
+    COMBINATION_PLATFORM_ARTIFACT_ID("quarkus.platform.artifact-id", "quarkus-bom"),
+    QUARKUS_VERSION("quarkus.version", "999-SNAPSHOT");
+
+    private final String key;
+    private final String defaultValue;
+
+    Configuration(String key, String defaultValue) {
+        this.key = key;
+        this.defaultValue = defaultValue;
+    }
+
+    public String get() {
+        return System.getProperty(key, defaultValue);
+    }
+
+    public Integer getAsInteger() {
+        return Integer.valueOf(get());
+    }
+
+    public Boolean getAsBoolean() {
+        return Boolean.valueOf(get());
+    }
+}
