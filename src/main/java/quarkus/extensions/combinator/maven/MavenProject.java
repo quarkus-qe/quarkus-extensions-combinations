@@ -2,6 +2,8 @@ package quarkus.extensions.combinator.maven;
 
 import java.io.File;
 
+import quarkus.extensions.combinator.utils.FileUtils;
+
 public class MavenProject extends MavenCommand {
 
     private static final String PACKAGE = "package";
@@ -28,6 +30,11 @@ public class MavenProject extends MavenCommand {
     public MavenProject clean() {
         runMavenCommand(CLEAN);
         return this;
+    }
+
+    public void delete() {
+        FileUtils.deleteDirectory(getWorkingDirectory());
+        FileUtils.deleteFile(getOutput());
     }
 
 }

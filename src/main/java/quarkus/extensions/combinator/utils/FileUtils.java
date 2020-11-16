@@ -19,9 +19,19 @@ public final class FileUtils {
         }
     }
 
-    public static void deleteFolder(File folder) {
+    public static void deleteDirectory(File folder) {
         if (folder.exists()) {
-            folder.delete();
+            try {
+                org.apache.commons.io.FileUtils.forceDelete(folder);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    public static void deleteFile(File file) {
+        if (file.exists()) {
+            file.delete();
         }
     }
 

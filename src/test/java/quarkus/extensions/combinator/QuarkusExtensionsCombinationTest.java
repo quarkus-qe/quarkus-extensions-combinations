@@ -23,6 +23,6 @@ class QuarkusExtensionsCombinationTest {
                 .generate()
                 .compile()
                 .verify()
-                .clean();
+                .delete();
     }
 }

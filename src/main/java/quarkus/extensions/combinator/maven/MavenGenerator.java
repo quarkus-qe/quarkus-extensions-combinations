@@ -25,7 +25,7 @@ public class MavenGenerator extends MavenCommand {
 
     public MavenProject generate() {
         FileUtils.clearFileContent(getOutput());
-        FileUtils.deleteFolder(projectAsWorkingDirectory());
+        FileUtils.deleteDirectory(projectAsWorkingDirectory());
 
         runMavenCommand(withQuarkusPlugin(), withProjectGroupId(), withProjectArtifactId(), withProjectVersion(),
                 withPlatformArtifactId(), withExtensions());

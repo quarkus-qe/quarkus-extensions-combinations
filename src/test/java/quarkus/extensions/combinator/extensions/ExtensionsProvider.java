@@ -41,8 +41,7 @@ public final class ExtensionsProvider implements ArgumentsProvider {
     public Stream<Arguments> provideArguments(ExtensionContext context) throws Exception {
         return Sets
                 .combinations(ImmutableSet.copyOf(extensions), Configuration.GROUP_OF.getAsInteger())
-                .stream().map(Arguments::of)
-                .limit(2);
+                .stream().map(Arguments::of);
     }
 
     private Predicate<String> byIsAnExtension() {
