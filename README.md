@@ -5,7 +5,7 @@ Test to try combinations of supported Quarkus extensions out. For each combinati
  - build project
  - test project
  
-| Note that each combination will be executed in parallel, so the more powerful the machine is, the faster will the test finish.
+| Note that each combination will be executed in parallel, so the more powerful the machine is, the faster will finish the test.
  
 ## How to run the tests
 
@@ -48,6 +48,22 @@ Bear in mind, that the larger is the group, the more combinations will be create
 | 4        | 14463090     |
 | 8        | 2147483647   |
 
+
+## How to limit the number of combinations
+
+This is useful when you are interested in running the test only using a limited number of combinations. We can configure this number using the `ts.limit-extensions` property:
+
+```
+mvn clean test -Dts.limit-extensions=2
+```
+
+## How to disable the random order of combinations
+
+By default, the order of the combinations is random. In order to disable this configuration, we need to turn of the property `ts.random-sort-extensions`:
+
+```
+mvn clean test -Dts.random-sort-extensions=false
+```
 
 # How to contribute
 
