@@ -2,6 +2,8 @@ package quarkus.extensions.combinator;
 
 public enum Configuration {
     ONLY_SUPPORTED_EXTENSIONS("ts.only-supported-extensions", "true"),
+    LIMIT_EXTENSIONS("ts.limit-extensions", "-1"),
+    RANDOM_SORT_EXTENSIONS("ts.random-sort-extensions", "true"),
     GROUP_OF("ts.extensions-in-groups-of", "3"),
     EXTENSIONS_ENDPOINT("ts.quarkus-extensions-endpoint", "https://code.quarkus.redhat.com/api/extensions"),
     COMBINATION_PROJECT_GROUP_ID("ts.combination-project-group-id", "io.quarkus.qe"),
