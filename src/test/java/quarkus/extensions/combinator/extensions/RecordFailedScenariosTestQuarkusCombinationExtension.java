@@ -19,7 +19,7 @@ public class RecordFailedScenariosTestQuarkusCombinationExtension implements Tes
 
     @Override
     public void testFailed(ExtensionContext context, Throwable cause) {
-        FileUtils.writeLine(new File(FAILED_FILE), context.getDisplayName());
+        FileUtils.appendLineIntoFile(context.getDisplayName(), new File(FAILED_FILE));
     }
 
 }

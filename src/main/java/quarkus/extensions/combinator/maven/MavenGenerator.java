@@ -1,6 +1,7 @@
 package quarkus.extensions.combinator.maven;
 
 import java.io.File;
+import java.util.Optional;
 import java.util.Set;
 
 import quarkus.extensions.combinator.Configuration;
@@ -13,6 +14,8 @@ public class MavenGenerator extends MavenCommand {
     private static final String PROJECT_ARTIFACT_ID = "projectArtifactId";
     private static final String PROJECT_VERSION = "projectVersion";
     private static final String PLATFORM_ARTIFACT_ID = "platformArtifactId";
+    private static final String PROPERTIES_FORMAT = ".properties";
+    private static final String APPLICATION_PROPERTIES = "src/main/resources/application" + PROPERTIES_FORMAT;
 
     private static final String EXTENSIONS_PARAM = "extensions";
 
@@ -29,6 +32,7 @@ public class MavenGenerator extends MavenCommand {
 
         runMavenCommand(withQuarkusPlugin(), withProjectGroupId(), withProjectArtifactId(), withProjectVersion(),
                 withPlatformArtifactId(), withExtensions());
+        updateApplicationProperties();
         return new MavenProject(getArtifactId(), projectAsWorkingDirectory());
     }
 
@@ -56,12 +60,15 @@ public class MavenGenerator extends MavenCommand {
         return String.format(QUARKUS_PLUGIN, Configuration.QUARKUS_VERSION.get());
     }
 
-    public static final MavenGenerator withExtensions(Set<String> extensions) {
-        return new MavenGenerator(extensions);
-    }
+    private void updateApplicationProperties() {
+        File applicationProperties = new File(projectAsWorkingDirectory(), APPLICATION_PROPERTIES);
 
-    private static final String generateArtifactId(Set<String> extensions) {
-        return String.join("-", extensions);
+        for (String extension : extensions) {
+            Optional.ofNullable(getClass().getClassLoader().getResourceAsStream(extension + PROPERTIES_FORMAT))
+                    .ifPresent(customPropertiesByExtension -> {
+                        FileUtils.appendInputStreamIntoFile(customPropertiesByExtension, applicationProperties);
+                    });
+        }
     }
 
     private File projectAsWorkingDirectory() {
@@ -70,5 +77,13 @@ public class MavenGenerator extends MavenCommand {
 
     private static File targetAsWorkingDirectory() {
         return new File("target");
+    }
+
+    public static final MavenGenerator withExtensions(Set<String> extensions) {
+        return new MavenGenerator(extensions);
+    }
+
+    private static final String generateArtifactId(Set<String> extensions) {
+        return String.join("-", extensions);
     }
 }

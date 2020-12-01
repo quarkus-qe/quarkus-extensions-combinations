@@ -65,6 +65,10 @@ By default, the order of the combinations is random. In order to disable this co
 mvn clean test -Dts.random-sort-extensions=false
 ```
 
+## How to write custom properties by extension
+
+By convention, the test suite will try to lookup to a property using the name of the extension. For example, if the quarkus extension is called "quarkus-oidc", then the framework will try to load the custom properties at `src/test/resources/oidc.properties` and append the content into the combination application properties file.
+
 # How to contribute
 
 The build instructions are available in the [contribution guide](CONTRIBUTING.md).
