@@ -22,4 +22,4 @@ jobs:
         with:
           java-version: openjdk${{ matrix.java }}
       - name: Build with Maven
-        run: mvn clean test -DskipTests=true
+        run: mvn -s .github/mvn-settings.xml clean test -Dts.limit-extensions=1
