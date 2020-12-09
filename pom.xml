@@ -11,7 +11,7 @@
         <commons-io.version>2.8.0</commons-io.version>
         <compiler-plugin.version>3.8.1</compiler-plugin.version>
         <guava.version>30.0-jre</guava.version>
-        <jackson-databind.version>2.11.3</jackson-databind.version>
+        <jackson-databind.version>2.12.0</jackson-databind.version>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -19,7 +19,7 @@
         <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
         <quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
         <quarkus.version>1.10.3.Final</quarkus.version>
-        <rest-assured.version>4.3.1</rest-assured.version>
+        <rest-assured.version>4.3.2</rest-assured.version>
         <surefire-plugin.version>3.0.0-M5</surefire-plugin.version>
         <junit.version>5.7.0</junit.version>
         <formatter-maven-plugin.version>2.13.0</formatter-maven-plugin.version>
