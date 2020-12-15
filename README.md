@@ -57,6 +57,14 @@ This is useful when you are interested in running the test only using a limited 
 mvn clean test -Dts.limit-extensions=2
 ```
 
+## How to run the combinations with selected extensions only
+
+This is useful when you are interested in running the test only using a limited number of extensions. We can configure it by using the `ts.includes-combinations-only-with-extensions` property:
+
+```
+mvn clean test -Dts.includes-combinations-only-with-extensions=oidc,agroal
+```
+
 ## How to disable the random order of combinations
 
 By default, the order of the combinations is random. In order to disable this configuration, we need to turn of the property `ts.random-sort-extensions`:

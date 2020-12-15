@@ -23,3 +23,5 @@ jobs:
           java-version: openjdk${{ matrix.java }}
       - name: Build with Maven
         run: mvn -s .github/mvn-settings.xml clean test -Dts.limit-extensions=1
+      - name: Verify extension that needs special properties
+        run: mvn -s .github/mvn-settings.xml clean test -Dts.includes-combinations-only-with-extensions=oidc -Dts.limit-extensions=1
