@@ -58,7 +58,16 @@ public final class ExtensionsProvider implements ArgumentsProvider {
     private List<Set<String>> generateCombinations() {
         return Sets.combinations(ImmutableSet.copyOf(extensions), Configuration.GROUP_OF.getAsInteger())
                 .stream()
+                .filter(byIncludesIfAny())
                 .collect(Collectors.toList());
+    }
+
+    private Predicate<Set<String>> byIncludesIfAny() {
+        return combinations -> {
+            List<String> includesExtensions = Configuration.INCLUDES_COMBINATIONS_ONLY_WITH_EXTENSIONS.getAsList();
+            return includesExtensions.isEmpty()
+                    || includesExtensions.stream().anyMatch(extension -> combinations.contains(extension));
+        };
     }
 
     private Predicate<String> byIsAnExtension() {

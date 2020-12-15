@@ -65,9 +65,8 @@ public class MavenGenerator extends MavenCommand {
 
         for (String extension : extensions) {
             Optional.ofNullable(getClass().getClassLoader().getResourceAsStream(extension + PROPERTIES_FORMAT))
-                    .ifPresent(customPropertiesByExtension -> {
-                        FileUtils.appendInputStreamIntoFile(customPropertiesByExtension, applicationProperties);
-                    });
+                    .ifPresent(customPropertiesByExtension -> FileUtils.appendInputStreamIntoFile(customPropertiesByExtension,
+                            applicationProperties));
         }
     }
 
