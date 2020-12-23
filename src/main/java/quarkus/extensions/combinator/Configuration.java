@@ -1,8 +1,9 @@
 package quarkus.extensions.combinator;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public enum Configuration {
     ONLY_SUPPORTED_EXTENSIONS("ts.only-supported-extensions", "true"),
@@ -33,7 +34,7 @@ public enum Configuration {
             return Collections.emptyList();
         }
 
-        return Arrays.asList(get().split(","));
+        return Stream.of(get().split(",")).map(String::trim).collect(Collectors.toList());
     }
 
     public Integer getAsInteger() {
