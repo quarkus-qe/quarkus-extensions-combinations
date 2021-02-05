@@ -21,7 +21,7 @@
         <quarkus.version>1.11.1.Final</quarkus.version>
         <rest-assured.version>4.3.3</rest-assured.version>
         <surefire-plugin.version>3.0.0-M5</surefire-plugin.version>
-        <junit.version>5.7.0</junit.version>
+        <junit.version>5.7.1</junit.version>
         <formatter-maven-plugin.version>2.13.0</formatter-maven-plugin.version>
     </properties>
     <dependencies>
