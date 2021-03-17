@@ -48,7 +48,7 @@ All submissions, including submissions by project members, need to be reviewed b
 
 ## Setup
 
-If you have not done so on this machine, you need to follow the same setup as the [Quarkus Setup guide](https://github.com/quarkusio/quarkus/blob/master/CONTRIBUTING.md#setup).
+If you have not done so on this machine, you need to follow the same setup as the [Quarkus Setup guide](https://github.com/quarkusio/quarkus/blob/main/CONTRIBUTING.md#setup).
 
 ### IDE Config and Code Style
 
@@ -62,9 +62,9 @@ If you want to run the formatting without doing a full build, you can run `./mvn
 #### Eclipse Setup
 
 Open the *Preferences* window, and then navigate to _Java_ -> _Code Style_ -> _Formatter_. Click _Import_ and then
-select the [`eclipse-format.xml`](https://raw.githubusercontent.com/quarkusio/quarkus/master/independent-projects/ide-config/src/main/resources/eclipse-format.xml) file.
+select the [`eclipse-format.xml`](https://raw.githubusercontent.com/quarkusio/quarkus/main/independent-projects/ide-config/src/main/resources/eclipse-format.xml) file.
 
-Next navigate to _Java_ -> _Code Style_ -> _Organize Imports_. Click _Import_ and select the [`eclipse.importorder`](https://raw.githubusercontent.com/quarkusio/quarkus/master/independent-projects/ide-config/src/main/resources/eclipse.importorder) file.
+Next navigate to _Java_ -> _Code Style_ -> _Organize Imports_. Click _Import_ and select the [`eclipse.importorder`](https://raw.githubusercontent.com/quarkusio/quarkus/main/independent-projects/ide-config/src/main/resources/eclipse.importorder) file.
 
 #### IDEA Setup
 
@@ -73,8 +73,8 @@ Open the _Preferences_ window (or _Settings_ depending on your edition) , naviga
 Restart your IDE, open the *Preferences* (or *Settings*) window again and navigate to _Other Settings_ -> _Eclipse Code Formatter_.
 
 Select _Use the Eclipse Code Formatter_, then change the _Eclipse Java Formatter Config File_ to point to the
-[`eclipse-format.xml`](https://raw.githubusercontent.com/quarkusio/quarkus/master/independent-projects/ide-config/src/main/resources/eclipse-format.xml). Make sure the _Optimize Imports_ box is ticked, and
-select [`eclipse.importorder`](https://raw.githubusercontent.com/quarkusio/quarkus/master/independent-projects/ide-config/src/main/resources/eclipse.importorder) file as the import order config file.
+[`eclipse-format.xml`](https://raw.githubusercontent.com/quarkusio/quarkus/main/independent-projects/ide-config/src/main/resources/eclipse-format.xml). Make sure the _Optimize Imports_ box is ticked, and
+select [`eclipse.importorder`](https://raw.githubusercontent.com/quarkusio/quarkus/main/independent-projects/ide-config/src/main/resources/eclipse.importorder) file as the import order config file.
 
 #### VS Code Setup
 
@@ -96,7 +96,7 @@ Then, configure the java settings using the next settings.json configuration:
   "editor.formatOnPaste": true,
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "vscjava.vscode-java-pack",
-  "java.format.settings.url": "https://raw.githubusercontent.com/quarkusio/quarkus/master/independent-projects/ide-config/src/main/resources/eclipse-format.xml",
+  "java.format.settings.url": "https://raw.githubusercontent.com/quarkusio/quarkus/main/independent-projects/ide-config/src/main/resources/eclipse-format.xml",
   "java.completion.importOrder": [
     "java",
     "javax",
