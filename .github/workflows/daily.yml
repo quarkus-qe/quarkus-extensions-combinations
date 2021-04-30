@@ -1,0 +1,70 @@
+name: "Daily Build"
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 23 * * *'
+jobs:
+  build:
+    name: Linux - JVM build - released Quarkus
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java: [ 11 ]
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/cache@v1
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      - name: Install JDK {{ matrix.java }}
+        # Uses sha for added security since tags can be updated
+        uses: joschi/setup-jdk@e87a7cec853d2dd7066adf837fe12bf0f3d45e52
+        with:
+          java-version: openjdk${{ matrix.java }}
+      - name: Build with Maven
+        run: mvn -s .github/mvn-settings.xml clean test -Dts.limit-extensions=200 -Dts.extensions-in-groups-of=2
+      - name: Zip Artifacts
+        if: failure()
+        run: |
+          zip -r artifacts-linux-jvm${{ matrix.java }}.zip . -i '**/target/*-reports/*.xml' '**/target/*.log'
+      - name: Archive artifacts
+        if: failure()
+        uses: actions/upload-artifact@v1
+        with:
+          name: ci-artifacts
+          path: artifacts-linux-jvm${{ matrix.java }}.zip
+  windows-build-released-jvm:
+    name: Windows - JVM build - released Quarkus
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        java: [ 11 ]
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/cache@v1
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      - name: Install JDK {{ matrix.java }}
+        uses: joschi/setup-jdk@e87a7cec853d2dd7066adf837fe12bf0f3d45e52
+        with:
+          java-version: ${{ matrix.java }}
+      - name: Build with Maven
+        shell: bash
+        run: mvn -s .github/mvn-settings.xml clean test -Dts.limit-extensions=200 -Dts.extensions-in-groups-of=2
+      - name: Zip Artifacts
+        if: failure()
+        shell: bash
+        run: |
+          # Disambiguate windows find from cygwin find
+          /usr/bin/find . -name '**/target/*-reports/*.xml' -o -name '**/target/*.log' -type d | tar -czf artifacts-windows-jvm${{ matrix.java }}.tar -T -
+      - name: Archive artifacts
+        uses: actions/upload-artifact@v1
+        if: failure()
+        with:
+          name: ci-artifacts
+          path: artifacts-windows-jvm${{ matrix.java }}.tar
