@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import quarkus.extensions.combinator.Configuration;
+import quarkus.extensions.combinator.utils.CommandBuilder;
 import quarkus.extensions.combinator.utils.FileUtils;
 
 public class MavenGenerator extends MavenCommand {
@@ -16,24 +17,34 @@ public class MavenGenerator extends MavenCommand {
     private static final String PLATFORM_ARTIFACT_ID = "platformArtifactId";
     private static final String PROPERTIES_FORMAT = ".properties";
     private static final String APPLICATION_PROPERTIES = "src/main/resources/application" + PROPERTIES_FORMAT;
+    private static final String OUTPUT_FOLDER = "target/";
 
     private static final String EXTENSIONS_PARAM = "extensions";
 
     private final Set<String> extensions;
+    private final String artifactId;
+    private final File output;
 
     private MavenGenerator(Set<String> extensions) {
-        super(generateArtifactId(extensions), targetAsWorkingDirectory());
+        super(targetAsWorkingDirectory());
+        this.artifactId = generateArtifactId(extensions);
         this.extensions = extensions;
+        this.output = new File(OUTPUT_FOLDER + artifactId + ".log");
     }
 
     public MavenProject generate() {
-        FileUtils.clearFileContent(getOutput());
+        FileUtils.clearFileContent(this.output);
         FileUtils.deleteDirectory(projectAsWorkingDirectory());
 
         runMavenCommand(withQuarkusPlugin(), withProjectGroupId(), withProjectArtifactId(), withProjectVersion(),
                 withPlatformArtifactId(), withExtensions());
         updateApplicationProperties();
-        return new MavenProject(getArtifactId(), projectAsWorkingDirectory());
+        return new MavenProject(output, projectAsWorkingDirectory());
+    }
+
+    @Override
+    protected void configureCommand(CommandBuilder command) {
+        command.outputToFile(output);
     }
 
     private String withPlatformArtifactId() {
@@ -45,7 +56,7 @@ public class MavenGenerator extends MavenCommand {
     }
 
     private String withProjectArtifactId() {
-        return withProperty(PROJECT_ARTIFACT_ID, getArtifactId());
+        return withProperty(PROJECT_ARTIFACT_ID, artifactId);
     }
 
     private String withProjectGroupId() {
@@ -71,7 +82,7 @@ public class MavenGenerator extends MavenCommand {
     }
 
     private File projectAsWorkingDirectory() {
-        return new File("target/" + getArtifactId());
+        return new File("target/" + artifactId);
     }
 
     private static File targetAsWorkingDirectory() {

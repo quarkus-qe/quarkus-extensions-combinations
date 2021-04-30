@@ -2,6 +2,7 @@ package quarkus.extensions.combinator.maven;
 
 import java.io.File;
 
+import quarkus.extensions.combinator.utils.CommandBuilder;
 import quarkus.extensions.combinator.utils.FileUtils;
 
 public class MavenProject extends MavenCommand {
@@ -13,8 +14,12 @@ public class MavenProject extends MavenCommand {
     private static final String SKIP_INTEGRATION_TESTS = "-DskipITs";
     private static final String RANDOM_PORT_FOR_TESTS = "-Dquarkus.http.test-port=0";
 
-    protected MavenProject(String artifactId, File workingDirectory) {
-        super(artifactId, workingDirectory);
+    private final File output;
+
+    protected MavenProject(File output, File workingDirectory) {
+        super(workingDirectory);
+
+        this.output = output;
     }
 
     public MavenProject compile() {
@@ -34,7 +39,10 @@ public class MavenProject extends MavenCommand {
 
     public void delete() {
         FileUtils.deleteDirectory(getWorkingDirectory());
-        FileUtils.deleteFile(getOutput());
     }
 
+    @Override
+    protected void configureCommand(CommandBuilder command) {
+        command.outputToFile(output);
+    }
 }
