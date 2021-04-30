@@ -25,6 +25,10 @@ public enum Configuration {
         this.defaultValue = defaultValue;
     }
 
+    public String key() {
+        return key;
+    }
+
     public String get() {
         return System.getProperty(key, defaultValue);
     }
