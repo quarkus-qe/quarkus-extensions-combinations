@@ -55,7 +55,7 @@ public final class ExtensionsProvider implements ArgumentsProvider {
     }
 
     @Override
-    public Stream<Arguments> provideArguments(ExtensionContext context) throws Exception {
+    public Stream<Arguments> provideArguments(ExtensionContext context) {
         List<Set<String>> combinations = generateCombinations();
         for (Identity<List<Set<String>>> function : COMBINATION_FUNCTIONS) {
             combinations = function.apply(combinations);
@@ -64,7 +64,7 @@ public final class ExtensionsProvider implements ArgumentsProvider {
         return combinations.stream().map(Arguments::of);
     }
 
-    private List<Set<String>> generateCombinations() {
+    public List<Set<String>> generateCombinations() {
         return Sets.combinations(ImmutableSet.copyOf(extensions), Configuration.GROUP_OF.getAsInteger())
                 .stream()
                 .filter(byExcludes().and(byIncludesIfAny()))
@@ -72,17 +72,17 @@ public final class ExtensionsProvider implements ArgumentsProvider {
     }
 
     private Predicate<Set<String>> byExcludes() {
-        return combinations -> {
+        return combination -> {
             return exclusions.isEmpty()
-                    || exclusions.stream().noneMatch(extension -> combinations.containsAll(extension));
+                    || !exclusions.stream().anyMatch(excluded -> combination.containsAll(excluded));
         };
     }
 
     private Predicate<Set<String>> byIncludesIfAny() {
-        return combinations -> {
+        return combination -> {
             List<String> includesExtensions = Configuration.INCLUDES_COMBINATIONS_ONLY_WITH_EXTENSIONS.getAsList();
             return includesExtensions.isEmpty()
-                    || includesExtensions.stream().allMatch(extension -> combinations.contains(extension));
+                    || includesExtensions.stream().allMatch(extension -> combination.contains(extension));
         };
     }
 
