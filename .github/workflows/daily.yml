@@ -55,7 +55,7 @@ jobs:
           java-version: ${{ matrix.java }}
       - name: Build with Maven
         shell: bash
-        run: mvn -s .github/mvn-settings.xml clean test -Dts.limit-extensions=200 -Dts.extensions-in-groups-of=2
+        run: mvn -s .github/mvn-settings.xml clean test -Dts.limit-extensions=200 -Dts.extensions-in-groups-of=2 -Dformat.skip=true
       - name: Zip Artifacts
         if: failure()
         shell: bash

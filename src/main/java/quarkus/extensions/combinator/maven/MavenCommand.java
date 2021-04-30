@@ -1,6 +1,7 @@
 package quarkus.extensions.combinator.maven;
 
 import java.io.File;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -10,42 +11,46 @@ import quarkus.extensions.combinator.utils.CommandBuilder;
 public abstract class MavenCommand {
 
     private static final String MAVEN = "mvn";
-    private static final String OUTPUT_FOLDER = "target/";
+    private static final String MAVEN_WINDOWS = "mvn.cmd";
+    private static final boolean IS_WINDOWS = System.getProperty("os.name").matches(".*[Ww]indows.*");
 
-    private final String artifactId;
     private final File workingDirectory;
-    private final File output;
 
-    protected MavenCommand(String artifactId, File workingDirectory) {
-        this.artifactId = artifactId;
-        this.workingDirectory = workingDirectory;
-        this.output = new File(OUTPUT_FOLDER + artifactId + ".log");
+    protected MavenCommand() {
+        this(Paths.get(".").toFile());
     }
 
-    protected File getOutput() {
-        return output;
+    protected MavenCommand(File workingDirectory) {
+        this.workingDirectory = workingDirectory;
     }
 
     protected File getWorkingDirectory() {
         return workingDirectory;
     }
 
-    protected String getArtifactId() {
-        return artifactId;
+    protected void configureCommand(CommandBuilder command) {
+
     }
 
     protected void runMavenCommand(String... params) {
         List<String> arguments = new ArrayList<>();
-        arguments.add(MAVEN);
+        addMavenCommand(arguments);
         arguments.addAll(Arrays.asList(params));
-        new CommandBuilder(arguments)
-                .workingDirectory(workingDirectory)
-                .outputToFile(this.output)
-                .runAndWait();
+        CommandBuilder command = new CommandBuilder(arguments).workingDirectory(workingDirectory);
+        configureCommand(command);
+        command.runAndWait();
     }
 
     protected String withProperty(String property, String value) {
         return String.format("-D%s=%s", property, value);
+    }
+
+    private void addMavenCommand(List<String> arguments) {
+        if (IS_WINDOWS) {
+            arguments.add(MAVEN_WINDOWS);
+        } else {
+            arguments.add(MAVEN);
+        }
     }
 
 }

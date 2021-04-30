@@ -25,6 +25,7 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 
 import quarkus.extensions.combinator.Configuration;
+import quarkus.extensions.combinator.maven.MavenGetQuarkusExtensions;
 import quarkus.extensions.combinator.utils.CommandBuilder;
 import quarkus.extensions.combinator.utils.Identity;
 
@@ -41,10 +42,8 @@ public final class ExtensionsProvider implements ArgumentsProvider {
     private final List<Set<String>> exclusions;
 
     public ExtensionsProvider() {
-        List<String> output = new ArrayList<>();
-        new CommandBuilder("mvn", "-f", "target/test-classes/list-extensions.pom.xml", "quarkus:list-extensions")
-                .outputToList(output)
-                .runAndWait();
+        MavenGetQuarkusExtensions mavenCommand = new MavenGetQuarkusExtensions();
+        List<String> output = mavenCommand.getExtensions();
 
         this.extensions = output.stream()
                 .filter(byIsAnExtension().and(byIsNotExcluded()))
