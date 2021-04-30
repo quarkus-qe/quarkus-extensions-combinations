@@ -55,7 +55,7 @@ jobs:
         with:
           java-version: openjdk${{ matrix.java }}
       - name: Build with Maven
-        run: mvn -s .github/mvn-settings.xml clean test -Dts.limit-extensions=1 -Dts.extensions-in-groups-of=25 -Dts.verify-native-mode=true
+        run: mvn -s .github/mvn-settings.xml clean test -Dts.limit-extensions=5 -Dts.extensions-in-groups-of=25 -Dts.verify-native-mode=true -Ddisable-parallel
       - name: Zip Artifacts
         if: failure()
         run: |
@@ -86,7 +86,7 @@ jobs:
         with:
           java-version: openjdk${{ matrix.java }}
       - name: Build with Maven
-        run: mvn -s .github/mvn-settings.xml clean test -Dts.limit-extensions=20 -Dts.extensions-in-groups-of=10 -Dts.verify-dev-mode=true
+        run: mvn -s .github/mvn-settings.xml clean test -Dts.limit-extensions=20 -Dts.extensions-in-groups-of=10 -Dts.verify-dev-mode=true -Ddisable-parallel
       - name: Zip Artifacts
         if: failure()
         run: |
@@ -168,7 +168,7 @@ jobs:
         uses: al-cheb/configure-pagefile-action@v1.2
       - name: Build with Maven
         shell: cmd
-        run: mvn -s .github/mvn-settings.xml clean test -Dts.limit-extensions=1 -Dts.extensions-in-groups-of=25 -Dts.verify-native-mode=true -Dformat.skip=true
+        run: mvn -s .github/mvn-settings.xml clean test -Dts.limit-extensions=5 -Dts.extensions-in-groups-of=25 -Dts.verify-native-mode=true -Dformat.skip=true -Ddisable-parallel
       - name: Zip Artifacts
         if: failure()
         shell: bash
@@ -201,7 +201,7 @@ jobs:
           java-version: ${{ matrix.java }}
       - name: Build with Maven
         shell: bash
-        run: mvn -s .github/mvn-settings.xml clean test -Dts.limit-extensions=20 -Dts.extensions-in-groups-of=10 -Dts.verify-dev-mode=true -Dformat.skip=true
+        run: mvn -s .github/mvn-settings.xml clean test -Dts.limit-extensions=20 -Dts.extensions-in-groups-of=10 -Dts.verify-dev-mode=true -Dformat.skip=true -Ddisable-parallel
       - name: Zip Artifacts
         if: failure()
         shell: bash

@@ -27,6 +27,8 @@
         <src.format.goal>format</src.format.goal>
         <src.sort.goal>sort</src.sort.goal>
         <xml.format.goal>xml-format</xml.format.goal>
+        <!-- Default surefire properties -->
+        <surefire.parallel.enabled>true</surefire.parallel.enabled>
     </properties>
     <dependencies>
         <dependency>
@@ -158,7 +160,10 @@
                         <quarkus.version>${quarkus.version}</quarkus.version>
                     </systemPropertyVariables>
                     <properties>
-                        <configurationParameters>junit.jupiter.execution.parallel.enabled = true junit.jupiter.execution.parallel.mode.default = concurrent</configurationParameters>
+                        <configurationParameters>
+                            junit.jupiter.execution.parallel.enabled = ${surefire.parallel.enabled}
+                            junit.jupiter.execution.parallel.mode.default = concurrent
+                        </configurationParameters>
                     </properties>
                 </configuration>
             </plugin>
@@ -176,6 +181,17 @@
                 <src.format.goal>validate</src.format.goal>
                 <src.sort.goal>check</src.sort.goal>
                 <xml.format.goal>xml-check</xml.format.goal>
+            </properties>
+        </profile>
+        <profile>
+            <id>disable-parallel</id>
+            <activation>
+                <property>
+                    <name>disable-parallel</name>
+                </property>
+            </activation>
+            <properties>
+                <surefire.parallel.enabled>false</surefire.parallel.enabled>
             </properties>
         </profile>
     </profiles>
