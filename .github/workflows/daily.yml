@@ -151,7 +151,7 @@ jobs:
         with:
           java-version: ${{ matrix.java }}
       - name: Install cl.exe
-          uses: ilammy/msvc-dev-cmd@v1
+        uses: ilammy/msvc-dev-cmd@v1
       - uses: microsoft/setup-msbuild@v1
       - name: Setup GraalVM
         id: setup-graalvm
