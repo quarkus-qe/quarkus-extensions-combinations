@@ -32,17 +32,25 @@ public abstract class MavenCommand {
 
     }
 
-    protected void runMavenCommand(String... params) {
+    protected Process runMavenCommand(String... params) {
+        return configureMavenCommand(params).run();
+    }
+
+    protected void runMavenCommandAndWait(String... params) {
+        configureMavenCommand(params).runAndWait();
+    }
+
+    protected String withProperty(String property, String value) {
+        return String.format("-D%s=%s", property, value);
+    }
+
+    private CommandBuilder configureMavenCommand(String[] params) {
         List<String> arguments = new ArrayList<>();
         addMavenCommand(arguments);
         arguments.addAll(Arrays.asList(params));
         CommandBuilder command = new CommandBuilder(arguments).workingDirectory(workingDirectory);
         configureCommand(command);
-        command.runAndWait();
-    }
-
-    protected String withProperty(String property, String value) {
-        return String.format("-D%s=%s", property, value);
+        return command;
     }
 
     private void addMavenCommand(List<String> arguments) {

@@ -14,6 +14,8 @@ public enum Configuration {
     EXTENSIONS_ENDPOINT("ts.quarkus-extensions-endpoint", "https://code.quarkus.redhat.com/api/extensions"),
     COMBINATION_PROJECT_GROUP_ID("ts.combination-project-group-id", "io.quarkus.qe"),
     COMBINATION_PROJECT_VERSION("ts.combination-project-version", "1.0.0-SNAPSHOT"),
+    VERIFY_NATIVE_MODE("ts.verify-native-mode", "false"),
+    VERIFY_DEV_MODE("ts.verify-dev-mode", "false"),
     COMBINATION_PLATFORM_ARTIFACT_ID("quarkus.platform.artifact-id", "quarkus-bom"),
     QUARKUS_VERSION("quarkus.version", "999-SNAPSHOT");
 

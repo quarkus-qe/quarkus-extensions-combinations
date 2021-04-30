@@ -4,7 +4,7 @@ on:
   schedule:
     - cron: '0 23 * * *'
 jobs:
-  build:
+  linux-build-released-jvm:
     name: Linux - JVM build - released Quarkus
     runs-on: ubuntu-latest
     strategy:
@@ -35,6 +35,68 @@ jobs:
         with:
           name: ci-artifacts
           path: artifacts-linux-jvm${{ matrix.java }}.zip
+  linux-build-released-native:
+    name: Linux - Native build - released Quarkus
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java: [ 11 ]
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/cache@v1
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      - name: Install JDK {{ matrix.java }}
+        # Uses sha for added security since tags can be updated
+        uses: joschi/setup-jdk@e87a7cec853d2dd7066adf837fe12bf0f3d45e52
+        with:
+          java-version: openjdk${{ matrix.java }}
+      - name: Build with Maven
+        run: mvn -s .github/mvn-settings.xml clean test -Dts.limit-extensions=1 -Dts.extensions-in-groups-of=25 -Dts.verify-native-mode=true
+      - name: Zip Artifacts
+        if: failure()
+        run: |
+          zip -r artifacts-linux-native${{ matrix.java }}.zip . -i '**/target/*-reports/*.xml' '**/target/*.log'
+      - name: Archive artifacts
+        if: failure()
+        uses: actions/upload-artifact@v1
+        with:
+          name: ci-artifacts
+          path: artifacts-linux-native${{ matrix.java }}.zip
+  linux-build-released-dev:
+    name: Linux - DEV build - released Quarkus
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java: [ 11 ]
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/cache@v1
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      - name: Install JDK {{ matrix.java }}
+        # Uses sha for added security since tags can be updated
+        uses: joschi/setup-jdk@e87a7cec853d2dd7066adf837fe12bf0f3d45e52
+        with:
+          java-version: openjdk${{ matrix.java }}
+      - name: Build with Maven
+        run: mvn -s .github/mvn-settings.xml clean test -Dts.limit-extensions=20 -Dts.extensions-in-groups-of=10 -Dts.verify-dev-mode=true
+      - name: Zip Artifacts
+        if: failure()
+        run: |
+          zip -r artifacts-linux-dev${{ matrix.java }}.zip . -i '**/target/*-reports/*.xml' '**/target/*.log'
+      - name: Archive artifacts
+        if: failure()
+        uses: actions/upload-artifact@v1
+        with:
+          name: ci-artifacts
+          path: artifacts-linux-dev${{ matrix.java }}.zip
   windows-build-released-jvm:
     name: Windows - JVM build - released Quarkus
     runs-on: windows-latest
@@ -68,3 +130,87 @@ jobs:
         with:
           name: ci-artifacts
           path: artifacts-windows-jvm${{ matrix.java }}.tar
+  windows-build-released-native:
+    name: Windows - Native build - released Quarkus
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        java: [ 11 ]
+        # Version 21.1 is not working due to https://github.com/quarkusio/quarkus/issues/14904
+        graalvm-version: [ "21.0.0.2.java11" ]
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/cache@v1
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      - name: Install JDK {{ matrix.java }}
+        uses: joschi/setup-jdk@e87a7cec853d2dd7066adf837fe12bf0f3d45e52
+        with:
+          java-version: ${{ matrix.java }}
+      - name: Install cl.exe
+          uses: ilammy/msvc-dev-cmd@v1
+      - uses: microsoft/setup-msbuild@v1
+      - name: Setup GraalVM
+        id: setup-graalvm
+        uses: DeLaGuardo/setup-graalvm@master
+        with:
+          graalvm-version: ${{ matrix.graalvm-version }}
+          java: java${{ matrix.graalvm-version }}
+      - name: Install native-image component
+        run: |
+          gu.cmd install native-image
+      - name: Configure Pagefile
+        # Increased the page-file size due to memory-consumption of native-image command
+        # For details see https://github.com/actions/virtual-environments/issues/785
+        uses: al-cheb/configure-pagefile-action@v1.2
+      - name: Build with Maven
+        shell: cmd
+        run: mvn -s .github/mvn-settings.xml clean test -Dts.limit-extensions=1 -Dts.extensions-in-groups-of=25 -Dts.verify-native-mode=true -Dformat.skip=true
+      - name: Zip Artifacts
+        if: failure()
+        shell: bash
+        run: |
+          # Disambiguate windows find from cygwin find
+          /usr/bin/find . -name '**/target/*-reports/*.xml' -o -name '**/target/*.log' -type d | tar -czf artifacts-windows-native${{ matrix.java }}.tar -T -
+      - name: Archive artifacts
+        uses: actions/upload-artifact@v1
+        if: failure()
+        with:
+          name: ci-artifacts
+          path: artifacts-windows-native${{ matrix.java }}.tar
+  windows-build-released-dev:
+    name: Windows - DEV build - released Quarkus
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        java: [ 11 ]
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/cache@v1
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      - name: Install JDK {{ matrix.java }}
+        uses: joschi/setup-jdk@e87a7cec853d2dd7066adf837fe12bf0f3d45e52
+        with:
+          java-version: ${{ matrix.java }}
+      - name: Build with Maven
+        shell: bash
+        run: mvn -s .github/mvn-settings.xml clean test -Dts.limit-extensions=20 -Dts.extensions-in-groups-of=10 -Dts.verify-dev-mode=true -Dformat.skip=true
+      - name: Zip Artifacts
+        if: failure()
+        shell: bash
+        run: |
+          # Disambiguate windows find from cygwin find
+          /usr/bin/find . -name '**/target/*-reports/*.xml' -o -name '**/target/*.log' -type d | tar -czf artifacts-windows-dev${{ matrix.java }}.tar -T -
+      - name: Archive artifacts
+        uses: actions/upload-artifact@v1
+        if: failure()
+        with:
+          name: ci-artifacts
+          path: artifacts-windows-dev${{ matrix.java }}.tar
