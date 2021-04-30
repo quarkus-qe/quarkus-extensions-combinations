@@ -26,7 +26,6 @@ import com.google.common.collect.Sets;
 
 import quarkus.extensions.combinator.Configuration;
 import quarkus.extensions.combinator.maven.MavenGetQuarkusExtensions;
-import quarkus.extensions.combinator.utils.CommandBuilder;
 import quarkus.extensions.combinator.utils.Identity;
 
 public final class ExtensionsProvider implements ArgumentsProvider {

@@ -8,7 +8,6 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
@@ -50,10 +49,10 @@ class QuarkusExtensionsCombinationTest {
 
             await().pollInterval(1, TimeUnit.SECONDS)
                     .atMost(30, TimeUnit.SECONDS).untilAsserted(() -> {
-                String output = FileUtils.readFileToString(project.getOutput(), Charset.defaultCharset());
-                assertTrue(output.contains("Profile dev activated"), "No found dev profile. Output: " + output);
-                assertTrue(output.contains("Installed features"), "No found features. Output: " + output);
-            });
+                        String output = FileUtils.readFileToString(project.getOutput(), Charset.defaultCharset());
+                        assertTrue(output.contains("Profile dev activated"), "No found dev profile. Output: " + output);
+                        assertTrue(output.contains("Installed features"), "No found features. Output: " + output);
+                    });
 
             project.getCurrentProcess().destroyForcibly();
         } catch (Exception ignored) {
