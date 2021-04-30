@@ -19,6 +19,7 @@
         <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
         <quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
         <quarkus.version>1.13.3.Final</quarkus.version>
+        <awaitility.version>4.0.3</awaitility.version>
         <rest-assured.version>4.3.3</rest-assured.version>
         <surefire-plugin.version>3.0.0-M5</surefire-plugin.version>
         <junit.version>5.7.1</junit.version>
@@ -35,6 +36,12 @@
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>${guava.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.awaitility</groupId>
+            <artifactId>awaitility</artifactId>
+            <version>${awaitility.version}</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -105,7 +112,7 @@
                 <version>${surefire-plugin.version}</version>
                 <configuration>
                     <systemPropertyVariables>
-                        <quarkus-plugin.version>${quarkus-plugin.version}</quarkus-plugin.version>
+                        <quarkus-plugin.version>${quarkus.version}</quarkus-plugin.version>
                         <quarkus.platform.artifact-id>${quarkus.platform.artifact-id}</quarkus.platform.artifact-id>
                         <quarkus.version>${quarkus.version}</quarkus.version>
                     </systemPropertyVariables>

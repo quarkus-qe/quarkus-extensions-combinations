@@ -12,7 +12,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.logging.Logger;
+
+import org.apache.commons.io.IOUtils;
 
 public class CommandBuilder {
 
@@ -61,7 +64,7 @@ public class CommandBuilder {
         return program;
     }
 
-    public void runAndWait() {
+    public Process run() {
         try {
             LOG.info("Running: " + String.join(" ", command));
             ProcessBuilder pb = new ProcessBuilder()
@@ -71,9 +74,18 @@ public class CommandBuilder {
             Optional.ofNullable(workingDirectory).ifPresent(pb::directory);
 
             Process process = pb.start();
+            new Thread(() -> {
+                outputConsumer.accept(description, process.getInputStream());
+            }, "stdout consumer for command " + description).start();
+            return process;
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+    }
 
-            outputConsumer.accept(description, process.getInputStream());
-
+    public void runAndWait() {
+        try {
+            Process process = run();
             int result = process.waitFor();
             if (result != 0) {
                 throw new RuntimeException(description + " failed (executed " + command + ", return code " + result + ")");
@@ -84,36 +96,23 @@ public class CommandBuilder {
     }
 
     private static final BiConsumer<String, InputStream> fileOutput(File targetFile) {
-        return (description, is) -> {
-            try (OutputStream outStream = new FileOutputStream(targetFile, true)) {
-                byte[] buffer = new byte[8 * 1024];
-                int bytesRead;
-                while ((bytesRead = is.read(buffer)) != -1) {
-                    outStream.write(buffer, 0, bytesRead);
-                }
-            } catch (IOException ignored) {
-            }
-        };
+        return output(line -> FileUtils.appendLineIntoFile(line, targetFile));
     }
 
     private static final BiConsumer<String, InputStream> logOutput() {
-        return (description, is) -> {
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(is))) {
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    LOG.info(line);
-                }
-            } catch (IOException ignored) {
-            }
-        };
+        return output(LOG::info);
     }
 
     private static final BiConsumer<String, InputStream> linesOutput(List<String> list) {
+        return output(list::add);
+    }
+
+    private static final BiConsumer<String, InputStream> output(Consumer<String> lineConsumer) {
         return (description, is) -> {
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(is))) {
                 String line;
                 while ((line = reader.readLine()) != null) {
-                    list.add(line);
+                    lineConsumer.accept(line);
                 }
             } catch (IOException ignored) {
             }

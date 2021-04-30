@@ -13,6 +13,18 @@ Test to try combinations of supported Quarkus extensions out. For each combinati
 mvn clean test
 ```
 
+In order to verify Native builds:
+
+```
+mvn clean test -Dts.verify-native-mode=true
+```
+
+In order to verify Dev mode:
+
+```
+mvn clean test -Dts.verify-dev-mode=true
+```
+
 ## How to run with a concrete version of Quarkus
 
 By default, the test will use the 999-SNAPSHOT Quarkus version. We can configure this version using the `quarkus.version` property:
