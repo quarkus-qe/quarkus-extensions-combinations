@@ -25,24 +25,3 @@ jobs:
         run: mvn -s .github/mvn-settings.xml clean test -Dts.limit-extensions=1
       - name: Verify extension that needs special properties
         run: mvn -s .github/mvn-settings.xml clean test -Dts.includes-combinations-only-with-extensions=oidc -Dts.limit-extensions=1
-  windows-build-released-jvm:
-    name: Windows - JVM build - released Quarkus
-    runs-on: windows-latest
-    strategy:
-      matrix:
-        java: [ 11 ]
-    steps:
-      - uses: actions/checkout@v1
-      - uses: actions/cache@v1
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-
-      - name: Install JDK {{ matrix.java }}
-        uses: joschi/setup-jdk@e87a7cec853d2dd7066adf837fe12bf0f3d45e52
-        with:
-          java-version: ${{ matrix.java }}
-      - name: Build with Maven
-        shell: bash
-        run: mvn -s .github/mvn-settings.xml clean test -Dts.limit-extensions=1 -Dformat.skip=true
