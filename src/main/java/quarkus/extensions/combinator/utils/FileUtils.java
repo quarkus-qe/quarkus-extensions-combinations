@@ -34,6 +34,16 @@ public final class FileUtils {
         }
     }
 
+    public static void copyFileTo(File file, File folder) {
+        if (folder.exists()) {
+            try {
+                org.apache.commons.io.FileUtils.copyFileToDirectory(file, folder);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
     public static void deleteFile(File file) {
         if (file.exists()) {
             file.delete();

@@ -1,6 +1,7 @@
 package quarkus.extensions.combinator.maven;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.Set;
 
@@ -16,7 +17,8 @@ public class MavenGenerator extends MavenCommand {
     private static final String PROJECT_VERSION = "projectVersion";
     private static final String PLATFORM_ARTIFACT_ID = "platformArtifactId";
     private static final String PROPERTIES_FORMAT = ".properties";
-    private static final String APPLICATION_PROPERTIES = "src/main/resources/application" + PROPERTIES_FORMAT;
+    private static final String RESOURCES_FOLDER = "src/main/resources";
+    private static final String APPLICATION_PROPERTIES = RESOURCES_FOLDER + "/application" + PROPERTIES_FORMAT;
     private static final String OUTPUT_FOLDER = "target/";
 
     private static final String EXTENSIONS_PARAM = "extensions";
@@ -39,6 +41,7 @@ public class MavenGenerator extends MavenCommand {
         runMavenCommandAndWait(withQuarkusPlugin(), withProjectGroupId(), withProjectArtifactId(), withProjectVersion(),
                 withPlatformArtifactId(), withExtensions());
         updateApplicationProperties();
+        copyResources();
         return new MavenProject(output, projectAsWorkingDirectory());
     }
 
@@ -78,6 +81,18 @@ public class MavenGenerator extends MavenCommand {
             Optional.ofNullable(getClass().getClassLoader().getResourceAsStream(extension + PROPERTIES_FORMAT))
                     .ifPresent(customPropertiesByExtension -> FileUtils.appendInputStreamIntoFile(customPropertiesByExtension,
                             applicationProperties));
+        }
+    }
+
+    private void copyResources() {
+        File targetResourcesFolder = new File(projectAsWorkingDirectory(), RESOURCES_FOLDER);
+
+        for (String extension : extensions) {
+            File requiredExternalResourcesFolder = new File(RESOURCES_FOLDER + "/" + extension);
+            if (requiredExternalResourcesFolder.exists() && requiredExternalResourcesFolder.isDirectory()) {
+                Arrays.stream(requiredExternalResourcesFolder.listFiles())
+                        .forEach(file -> FileUtils.copyFileTo(file, targetResourcesFolder));
+            }
         }
     }
 
