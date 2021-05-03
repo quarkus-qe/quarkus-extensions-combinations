@@ -23,10 +23,8 @@ jobs:
         uses: joschi/setup-jdk@e87a7cec853d2dd7066adf837fe12bf0f3d45e52
         with:
           java-version: openjdk${{ matrix.java }}
-      - name: JVM
+      - name: Run Test Suite
         run: mvn -s .github/mvn-settings.xml clean test -Dts.limit-extensions=200 -Dts.extensions-in-groups-of=2
-      - name: Dev Mode
-        run: mvn -s .github/mvn-settings.xml clean test -Dts.limit-extensions=20 -Dts.extensions-in-groups-of=10 -Dts.verify-dev-mode=true -Ddisable-parallel
       - name: Zip Artifacts
         if: failure()
         run: |
@@ -37,8 +35,9 @@ jobs:
         with:
           name: ci-artifacts
           path: artifacts-linux-jvm${{ matrix.java }}.zip
-  linux-build-released-native:
-    name: Linux - Native build - released Quarkus
+  linux-build-released-dev:
+    name: Linux - DEV build - released Quarkus
+    needs: [ linux-build-released-jvm ]
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -56,7 +55,39 @@ jobs:
         uses: joschi/setup-jdk@e87a7cec853d2dd7066adf837fe12bf0f3d45e52
         with:
           java-version: openjdk${{ matrix.java }}
-      - name: Build with Maven
+      - name: Run Test Suite
+        run: mvn -s .github/mvn-settings.xml clean test -Dts.limit-extensions=20 -Dts.extensions-in-groups-of=10 -Dts.verify-dev-mode=true -Ddisable-parallel
+      - name: Zip Artifacts
+        if: failure()
+        run: |
+          zip -r artifacts-linux-dev${{ matrix.java }}.zip . -i '**/*-reports/*.xml' '**/*.log'
+      - name: Archive artifacts
+        if: failure()
+        uses: actions/upload-artifact@v1
+        with:
+          name: ci-artifacts
+          path: artifacts-linux-dev${{ matrix.java }}.zip
+  linux-build-released-native:
+    name: Linux - Native build - released Quarkus
+    needs: [ linux-build-released-dev ]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java: [ 11 ]
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/cache@v1
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      - name: Install JDK {{ matrix.java }}
+        # Uses sha for added security since tags can be updated
+        uses: joschi/setup-jdk@e87a7cec853d2dd7066adf837fe12bf0f3d45e52
+        with:
+          java-version: openjdk${{ matrix.java }}
+      - name: Run Test Suite
         run: mvn -s .github/mvn-settings.xml clean test -Dts.limit-extensions=5 -Dts.extensions-in-groups-of=25 -Dts.verify-native-mode=true -Ddisable-parallel
       - name: Zip Artifacts
         if: failure()
@@ -86,10 +117,41 @@ jobs:
         uses: joschi/setup-jdk@e87a7cec853d2dd7066adf837fe12bf0f3d45e52
         with:
           java-version: ${{ matrix.java }}
-      - name: JVM
+      - name: Run Test Suite
         shell: bash
         run: mvn -s .github/mvn-settings.xml clean test -Dts.limit-extensions=200 -Dts.extensions-in-groups-of=2 -Dformat.skip=true
-      - name: Dev Mode
+      - name: Zip Artifacts
+        if: failure()
+        shell: bash
+        run: |
+          # Disambiguate windows find from cygwin find
+          /usr/bin/find . -print | grep -e "-reports" -e ".log" | grep -v "git" | tar -czf artifacts-windows-jvm${{ matrix.java }}.tar -T -
+      - name: Archive artifacts
+        uses: actions/upload-artifact@v1
+        if: failure()
+        with:
+          name: ci-artifacts
+          path: artifacts-windows-jvm${{ matrix.java }}.tar
+  windows-build-released-dev:
+    name: Windows - DEV build - released Quarkus
+    needs: [ windows-build-released-jvm ]
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        java: [ 11 ]
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/cache@v1
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      - name: Install JDK {{ matrix.java }}
+        uses: joschi/setup-jdk@e87a7cec853d2dd7066adf837fe12bf0f3d45e52
+        with:
+          java-version: ${{ matrix.java }}
+      - name: Run Test Suite
         shell: bash
         run: mvn -s .github/mvn-settings.xml clean test -Dts.limit-extensions=20 -Dts.extensions-in-groups-of=10 -Dts.verify-dev-mode=true -Dformat.skip=true -Ddisable-parallel
       - name: Zip Artifacts
@@ -103,9 +165,10 @@ jobs:
         if: failure()
         with:
           name: ci-artifacts
-          path: artifacts-windows-jvm${{ matrix.java }}.tar
+          path: artifacts-windows-dev${{ matrix.java }}.tar
   windows-build-released-native:
     name: Windows - Native build - released Quarkus
+    needs: [ windows-build-released-native ]
     runs-on: windows-latest
     strategy:
       matrix:
@@ -140,7 +203,7 @@ jobs:
         # Increased the page-file size due to memory-consumption of native-image command
         # For details see https://github.com/actions/virtual-environments/issues/785
         uses: al-cheb/configure-pagefile-action@v1.2
-      - name: Build with Maven
+      - name: Run Test Suite
         shell: cmd
         run: mvn -s .github/mvn-settings.xml clean test -Dts.limit-extensions=5 -Dts.extensions-in-groups-of=25 -Dts.verify-native-mode=true -Dformat.skip=true -Ddisable-parallel
       - name: Zip Artifacts
