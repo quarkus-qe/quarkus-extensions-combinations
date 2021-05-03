@@ -16,6 +16,7 @@ public class MavenProject extends MavenCommand {
     private static final String SKIP_INTEGRATION_TESTS = "-DskipITs";
     private static final String RANDOM_PORT_FOR_TESTS = "-Dquarkus.http.test-port=0";
     private static final String RANDOM_PORT_FOR_RUNNING = "-Dquarkus.http.port=0";
+    private static final String XMX_MEMORY_LIMIT = "-Dquarkus.native.native-image-xmx=4g";
 
     private final File output;
 
@@ -43,7 +44,7 @@ public class MavenProject extends MavenCommand {
     }
 
     public MavenProject nativeMode() {
-        runMavenCommandAndWait(CLEAN, VERIFY, NATIVE_MODE, RANDOM_PORT_FOR_TESTS);
+        runMavenCommandAndWait(CLEAN, VERIFY, NATIVE_MODE, XMX_MEMORY_LIMIT, RANDOM_PORT_FOR_TESTS);
         return this;
     }
 
