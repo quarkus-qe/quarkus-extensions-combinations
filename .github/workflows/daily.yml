@@ -97,7 +97,7 @@ jobs:
         shell: bash
         run: |
           # Disambiguate windows find from cygwin find
-          /usr/bin/find . -name '*-reports' -o -name '*.log' -type d | tar -czf artifacts-windows-jvm${{ matrix.java }}.tar -T -
+          /usr/bin/find . -print | grep -e "-reports" -e ".log" | grep -v "git" | tar -czf artifacts-windows-jvm${{ matrix.java }}.tar -T -
       - name: Archive artifacts
         uses: actions/upload-artifact@v1
         if: failure()
@@ -148,7 +148,7 @@ jobs:
         shell: bash
         run: |
           # Disambiguate windows find from cygwin find
-          /usr/bin/find . -name '*-reports' -o -name '*.log' -type d | tar -czf artifacts-windows-native${{ matrix.java }}.tar -T -
+          /usr/bin/find . -print | grep -e "-reports" -e ".log" | grep -v "git" | tar -czf artifacts-windows-native${{ matrix.java }}.tar -T -
       - name: Archive artifacts
         uses: actions/upload-artifact@v1
         if: failure()
