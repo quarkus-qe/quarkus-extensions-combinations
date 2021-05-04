@@ -172,6 +172,7 @@
                             junit.jupiter.execution.parallel.mode.default = concurrent
                         </configurationParameters>
                     </properties>
+                    <argLine>-Xmx2g</argLine>
                     <!-- Configure Display name accordingly -->
                     <statelessTestsetReporter
                             implementation="org.apache.maven.plugin.surefire.extensions.junit5.JUnit5Xml30StatelessReporter">
