@@ -168,7 +168,7 @@ jobs:
           path: artifacts-windows-dev${{ matrix.java }}.tar
   windows-build-released-native:
     name: Windows - Native build - released Quarkus
-    needs: [ windows-build-released-native ]
+    needs: [ windows-build-released-dev ]
     runs-on: windows-latest
     strategy:
       matrix:
