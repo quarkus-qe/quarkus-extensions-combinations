@@ -3,16 +3,18 @@ package quarkus.extensions.combinator.maven;
 import java.io.File;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
+
+import org.apache.commons.lang3.StringUtils;
 
 import quarkus.extensions.combinator.utils.CommandBuilder;
+import quarkus.extensions.combinator.utils.OsUtils;
 
 public abstract class MavenCommand {
 
     private static final String MAVEN = "mvn";
     private static final String MAVEN_WINDOWS = "mvn.cmd";
-    private static final boolean IS_WINDOWS = System.getProperty("os.name").matches(".*[Ww]indows.*");
 
     private final File workingDirectory;
 
@@ -47,14 +49,14 @@ public abstract class MavenCommand {
     private CommandBuilder configureMavenCommand(String[] params) {
         List<String> arguments = new ArrayList<>();
         addMavenCommand(arguments);
-        arguments.addAll(Arrays.asList(params));
+        Stream.of(params).filter(StringUtils::isNotEmpty).forEach(arguments::add);
         CommandBuilder command = new CommandBuilder(arguments).workingDirectory(workingDirectory);
         configureCommand(command);
         return command;
     }
 
     private void addMavenCommand(List<String> arguments) {
-        if (IS_WINDOWS) {
+        if (OsUtils.isWindows()) {
             arguments.add(MAVEN_WINDOWS);
         } else {
             arguments.add(MAVEN);
