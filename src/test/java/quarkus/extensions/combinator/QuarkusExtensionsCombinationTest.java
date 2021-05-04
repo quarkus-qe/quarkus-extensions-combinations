@@ -14,10 +14,12 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
 
+import quarkus.extensions.combinator.exclusions.ExclusionsManager;
 import quarkus.extensions.combinator.extensions.ExtensionsProvider;
 import quarkus.extensions.combinator.extensions.RecordFailedScenariosTestQuarkusCombinationExtension;
 import quarkus.extensions.combinator.maven.MavenGenerator;
 import quarkus.extensions.combinator.maven.MavenProject;
+import quarkus.extensions.combinator.utils.OsUtils;
 
 @Execution(ExecutionMode.CONCURRENT)
 @ExtendWith(RecordFailedScenariosTestQuarkusCombinationExtension.class)
@@ -28,8 +30,13 @@ class QuarkusExtensionsCombinationTest {
     void testExtensions(Set<String> extensions) {
         MavenProject project = MavenGenerator.withExtensions(extensions)
                 .generate()
-                .compile()
-                .verify();
+                .compile();
+
+        if (OsUtils.isWindows() && ExclusionsManager.get().isTestsDisabledOnWindows(extensions)) {
+            project.skipTests();
+        }
+
+        project.verify();
 
         if (Configuration.VERIFY_DEV_MODE.getAsBoolean()) {
             project.devMode();

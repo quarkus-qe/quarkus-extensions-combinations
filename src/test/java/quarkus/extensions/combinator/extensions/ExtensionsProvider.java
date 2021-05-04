@@ -2,12 +2,8 @@ package quarkus.extensions.combinator.extensions;
 
 import static java.util.Arrays.asList;
 
-import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map.Entry;
-import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Function;
@@ -25,6 +21,7 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 
 import quarkus.extensions.combinator.Configuration;
+import quarkus.extensions.combinator.exclusions.ExclusionsManager;
 import quarkus.extensions.combinator.maven.MavenGetQuarkusExtensions;
 import quarkus.extensions.combinator.utils.Identity;
 
@@ -33,12 +30,10 @@ public final class ExtensionsProvider implements ArgumentsProvider {
     private static final Logger LOG = Logger.getLogger(ExtensionsProvider.class.getName());
 
     private static final String QUARKUS = "quarkus-";
-    private static final String EXCLUSIONS_FILE = "exclusions.properties";
 
     private static final List<Identity<List<Set<String>>>> COMBINATION_FUNCTIONS = asList(randomSort(), limit());
 
     private final List<String> extensions;
-    private final List<Set<String>> exclusions;
 
     public ExtensionsProvider() {
         MavenGetQuarkusExtensions mavenCommand = new MavenGetQuarkusExtensions();
@@ -49,7 +44,6 @@ public final class ExtensionsProvider implements ArgumentsProvider {
                 .map(extractName())
                 .filter(bySupportedIfEnabled())
                 .collect(Collectors.toList());
-        this.exclusions = initializeExclusions();
     }
 
     @Override
@@ -65,15 +59,12 @@ public final class ExtensionsProvider implements ArgumentsProvider {
     public List<Set<String>> generateCombinations() {
         return Sets.combinations(ImmutableSet.copyOf(extensions), Configuration.GROUP_OF.getAsInteger())
                 .stream()
-                .filter(byExcludes().and(byIncludesIfAny()))
+                .filter(isNotExcluded().and(byIncludesIfAny()))
                 .collect(Collectors.toList());
     }
 
-    private Predicate<Set<String>> byExcludes() {
-        return combination -> {
-            return exclusions.isEmpty()
-                    || !exclusions.stream().anyMatch(excluded -> combination.containsAll(excluded));
-        };
+    private Predicate<Set<String>> isNotExcluded() {
+        return ExclusionsManager.get()::isNotExcluded;
     }
 
     private Predicate<Set<String>> byIncludesIfAny() {
@@ -125,28 +116,6 @@ public final class ExtensionsProvider implements ArgumentsProvider {
 
             return combinations;
         };
-    }
-
-    private static final List<Set<String>> initializeExclusions() {
-        List<Set<String>> exclusions = new ArrayList<>();
-
-        try (InputStream input = ExtensionsProvider.class.getClassLoader().getResourceAsStream(EXCLUSIONS_FILE)) {
-
-            Properties prop = new Properties();
-            prop.load(input);
-            for (Entry<Object, Object> entry : prop.entrySet()) {
-                Boolean isEnabled = Boolean.parseBoolean((String) entry.getValue());
-                String combination = (String) entry.getKey();
-                if (isEnabled) {
-                    exclusions.add(Stream.of(combination.split(",")).collect(Collectors.toSet()));
-                }
-            }
-
-        } catch (Exception ex) {
-            LOG.warning("Failed to load exclusions. No exclusions will be used. Cause: " + ex.getMessage());
-        }
-
-        return exclusions;
     }
 
 }

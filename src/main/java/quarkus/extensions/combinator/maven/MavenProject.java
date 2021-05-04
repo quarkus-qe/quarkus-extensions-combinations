@@ -1,5 +1,7 @@
 package quarkus.extensions.combinator.maven;
 
+import static org.apache.commons.lang3.StringUtils.EMPTY;
+
 import java.io.File;
 
 import quarkus.extensions.combinator.utils.CommandBuilder;
@@ -21,6 +23,7 @@ public class MavenProject extends MavenCommand {
     private final File output;
 
     private Process currentProcess;
+    private boolean skipTests = false;
 
     protected MavenProject(File output, File workingDirectory) {
         super(workingDirectory);
@@ -34,22 +37,25 @@ public class MavenProject extends MavenCommand {
     }
 
     public MavenProject verify() {
-        runMavenCommandAndWait(VERIFY, RANDOM_PORT_FOR_TESTS);
+
+        runMavenCommandAndWait(VERIFY, RANDOM_PORT_FOR_TESTS, optionalSkipTests(), optionalSkipITs());
         return this;
     }
 
     public MavenProject devMode() {
-        currentProcess = runMavenCommand(DEV_MODE, RANDOM_PORT_FOR_RUNNING);
+        currentProcess = runMavenCommand(DEV_MODE, RANDOM_PORT_FOR_RUNNING, optionalSkipTests(),
+                optionalSkipITs());
         return this;
     }
 
     public MavenProject nativeMode() {
-        runMavenCommandAndWait(CLEAN, VERIFY, NATIVE_MODE, XMX_MEMORY_LIMIT, RANDOM_PORT_FOR_TESTS);
+        runMavenCommandAndWait(CLEAN, VERIFY, NATIVE_MODE, XMX_MEMORY_LIMIT, RANDOM_PORT_FOR_TESTS,
+                optionalSkipTests(), optionalSkipITs());
         return this;
     }
 
-    public MavenProject clean() {
-        runMavenCommandAndWait(CLEAN);
+    public MavenProject skipTests() {
+        skipTests = true;
         return this;
     }
 
@@ -68,5 +74,13 @@ public class MavenProject extends MavenCommand {
     @Override
     protected void configureCommand(CommandBuilder command) {
         command.outputToFile(output);
+    }
+
+    private String optionalSkipTests() {
+        return skipTests ? SKIP_TESTS : EMPTY;
+    }
+
+    private String optionalSkipITs() {
+        return skipTests ? SKIP_INTEGRATION_TESTS : EMPTY;
     }
 }
