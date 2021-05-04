@@ -56,7 +56,7 @@ jobs:
         with:
           java-version: openjdk${{ matrix.java }}
       - name: Run Test Suite
-        run: mvn -s .github/mvn-settings.xml clean test -Dts.limit-extensions=20 -Dts.extensions-in-groups-of=10 -Dts.verify-dev-mode=true -Ddisable-parallel
+        run: mvn -s .github/mvn-settings.xml clean test -Dts.limit-extensions=20 -Dts.extensions-in-groups-of=10 -Dts.verify-dev-mode=true
       - name: Zip Artifacts
         if: failure()
         run: |
