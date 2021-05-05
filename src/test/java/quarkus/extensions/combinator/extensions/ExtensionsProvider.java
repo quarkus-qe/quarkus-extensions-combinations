@@ -8,7 +8,6 @@ import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -26,8 +25,6 @@ import quarkus.extensions.combinator.maven.MavenGetQuarkusExtensions;
 import quarkus.extensions.combinator.utils.Identity;
 
 public final class ExtensionsProvider implements ArgumentsProvider {
-
-    private static final Logger LOG = Logger.getLogger(ExtensionsProvider.class.getName());
 
     private static final String QUARKUS = "quarkus-";
 

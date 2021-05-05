@@ -9,8 +9,6 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.api.parallel.Execution;
-import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
 
@@ -21,7 +19,6 @@ import quarkus.extensions.combinator.maven.MavenGenerator;
 import quarkus.extensions.combinator.maven.MavenProject;
 import quarkus.extensions.combinator.utils.OsUtils;
 
-@Execution(ExecutionMode.CONCURRENT)
 @ExtendWith(RecordFailedScenariosTestQuarkusCombinationExtension.class)
 class QuarkusExtensionsCombinationTest {
 
