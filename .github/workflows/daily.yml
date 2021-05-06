@@ -136,6 +136,7 @@ jobs:
   windows-build-released-dev:
     name: Windows - DEV build - released Quarkus
     needs: [ windows-build-released-jvm ]
+    if: false # always skip job as it's failing due to memory requirements
     runs-on: windows-latest
     strategy:
       matrix:
