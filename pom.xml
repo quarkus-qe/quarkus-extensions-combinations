@@ -18,7 +18,7 @@
         <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
         <quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
         <quarkus.version>1.13.3.Final</quarkus.version>
-        <awaitility.version>4.0.3</awaitility.version>
+        <awaitility.version>4.1.0</awaitility.version>
         <rest-assured.version>4.3.3</rest-assured.version>
         <surefire-plugin.version>3.0.0-M5</surefire-plugin.version>
         <junit.version>5.7.1</junit.version>
