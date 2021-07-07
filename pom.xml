@@ -10,7 +10,7 @@
         <commons-lang3.version>3.12.0</commons-lang3.version>
         <compiler-plugin.version>3.8.1</compiler-plugin.version>
         <guava.version>30.1.1-jre</guava.version>
-        <jackson-databind.version>2.12.3</jackson-databind.version>
+        <jackson-databind.version>2.12.4</jackson-databind.version>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
