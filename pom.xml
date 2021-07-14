@@ -6,7 +6,7 @@
     <artifactId>quarkus-extensions-combinator</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <properties>
-        <commons-io.version>2.10.0</commons-io.version>
+        <commons-io.version>2.11.0</commons-io.version>
         <commons-lang3.version>3.12.0</commons-lang3.version>
         <compiler-plugin.version>3.8.1</compiler-plugin.version>
         <guava.version>30.1.1-jre</guava.version>
