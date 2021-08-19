@@ -16,6 +16,7 @@ public enum Configuration {
     COMBINATION_PROJECT_VERSION("ts.combination-project-version", "1.0.0-SNAPSHOT"),
     VERIFY_NATIVE_MODE("ts.verify-native-mode", "false"),
     VERIFY_DEV_MODE("ts.verify-dev-mode", "false"),
+    COMBINATION_PLATFORM_GROUP_ID("quarkus.platform.group-id", "io.quarkus"),
     COMBINATION_PLATFORM_ARTIFACT_ID("quarkus.platform.artifact-id", "quarkus-bom"),
     QUARKUS_VERSION("quarkus.version", "999-SNAPSHOT");
 

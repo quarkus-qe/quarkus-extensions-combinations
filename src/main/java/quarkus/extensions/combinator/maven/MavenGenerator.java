@@ -16,6 +16,7 @@ public class MavenGenerator extends MavenCommand {
     private static final String PROJECT_ARTIFACT_ID = "projectArtifactId";
     private static final String PROJECT_VERSION = "projectVersion";
     private static final String PLATFORM_ARTIFACT_ID = "platformArtifactId";
+    private static final String PLATFORM_GROUP_ID = "platformGroupId";
     private static final String PROPERTIES_FORMAT = ".properties";
     private static final String RESOURCES_FOLDER = "src/main/resources";
     private static final String APPLICATION_PROPERTIES = RESOURCES_FOLDER + "/application" + PROPERTIES_FORMAT;
@@ -39,7 +40,7 @@ public class MavenGenerator extends MavenCommand {
         FileUtils.deleteDirectory(projectAsWorkingDirectory());
 
         runMavenCommandAndWait(withQuarkusPlugin(), withProjectGroupId(), withProjectArtifactId(), withProjectVersion(),
-                withPlatformArtifactId(), withExtensions());
+                withPlatformGroupId(), withPlatformArtifactId(), withExtensions());
         updateApplicationProperties();
         copyResources();
         return new MavenProject(output, projectAsWorkingDirectory());
@@ -48,6 +49,10 @@ public class MavenGenerator extends MavenCommand {
     @Override
     protected void configureCommand(CommandBuilder command) {
         command.outputToFile(output);
+    }
+
+    private String withPlatformGroupId() {
+        return withProperty(PLATFORM_GROUP_ID, Configuration.COMBINATION_PLATFORM_GROUP_ID.get());
     }
 
     private String withPlatformArtifactId() {
