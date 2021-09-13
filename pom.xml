@@ -21,7 +21,7 @@
         <awaitility.version>4.1.0</awaitility.version>
         <rest-assured.version>4.4.0</rest-assured.version>
         <surefire-plugin.version>3.0.0-M5</surefire-plugin.version>
-        <junit.version>5.7.2</junit.version>
+        <junit.version>5.8.0</junit.version>
         <formatter-maven-plugin.version>2.16.0</formatter-maven-plugin.version>
         <impsort-maven-plugin.version>1.6.2</impsort-maven-plugin.version>
         <xml-format-maven-plugin>3.2.0</xml-format-maven-plugin>
