@@ -3,6 +3,7 @@ package quarkus.extensions.combinator.maven;
 import java.io.File;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -15,6 +16,13 @@ public abstract class MavenCommand {
 
     private static final String MAVEN = "mvn";
     private static final String MAVEN_WINDOWS = "mvn.cmd";
+    private static final String MAVEN_REPO_LOCAL = "maven.repo.local";
+    private static final String QUARKUS_PLUGIN_VERSION = "quarkus-plugin.version";
+    private static final String QUARKUS_PLATFORM_VERSION = "quarkus.platform.version";
+    private static final String QUARKUS_PLATFORM_GROUP_ID = "quarkus.platform.group-id";
+    private static final String QUARKUS_PLATFORM_ARTIFACT_ID = "quarkus.platform.artifact-id";
+    private static final List<String> PROPERTIES_TO_PROPAGATE = Arrays.asList(MAVEN_REPO_LOCAL, QUARKUS_PLUGIN_VERSION,
+            QUARKUS_PLATFORM_VERSION, QUARKUS_PLATFORM_GROUP_ID, QUARKUS_PLATFORM_ARTIFACT_ID);
 
     private final File workingDirectory;
 
@@ -49,10 +57,20 @@ public abstract class MavenCommand {
     private CommandBuilder configureMavenCommand(String[] params) {
         List<String> arguments = new ArrayList<>();
         addMavenCommand(arguments);
+        propagateProperties(arguments);
         Stream.of(params).filter(StringUtils::isNotEmpty).forEach(arguments::add);
         CommandBuilder command = new CommandBuilder(arguments).workingDirectory(workingDirectory);
         configureCommand(command);
         return command;
+    }
+
+    private void propagateProperties(List<String> arguments) {
+        for (String property : PROPERTIES_TO_PROPAGATE) {
+            String value = System.getProperty(property);
+            if (StringUtils.isNotEmpty(value)) {
+                arguments.add(withProperty(property, value));
+            }
+        }
     }
 
     private void addMavenCommand(List<String> arguments) {

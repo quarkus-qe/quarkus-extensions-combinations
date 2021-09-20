@@ -3,6 +3,7 @@ package quarkus.extensions.combinator.maven;
 import java.util.ArrayList;
 import java.util.List;
 
+import quarkus.extensions.combinator.Configuration;
 import quarkus.extensions.combinator.utils.CommandBuilder;
 
 public class MavenGetQuarkusExtensions extends MavenCommand {
@@ -11,8 +12,14 @@ public class MavenGetQuarkusExtensions extends MavenCommand {
 
     public List<String> getExtensions() {
         extensions.clear();
-        runMavenCommandAndWait("-f", "target/test-classes/list-extensions.pom.xml", "quarkus:list-extensions", "-Dformat=id");
+        String quarkusMavenPlugin = getQuarkusMavenPlugin();
+        runMavenCommandAndWait("-f", "target/test-classes/list-extensions.pom.xml", quarkusMavenPlugin + ":list-extensions",
+                "-Dformat=id");
         return extensions;
+    }
+
+    private String getQuarkusMavenPlugin() {
+        return Configuration.QUARKUS_MAVEN_PLUGIN.get() + ":" + Configuration.QUARKUS_VERSION.get();
     }
 
     @Override
