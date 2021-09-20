@@ -11,7 +11,6 @@ import quarkus.extensions.combinator.utils.FileUtils;
 
 public class MavenGenerator extends MavenCommand {
 
-    private static final String QUARKUS_PLUGIN = "io.quarkus:quarkus-maven-plugin:%s:create";
     private static final String PROJECT_GROUP_ID = "projectGroupId";
     private static final String PROJECT_ARTIFACT_ID = "projectArtifactId";
     private static final String PROJECT_VERSION = "projectVersion";
@@ -39,7 +38,7 @@ public class MavenGenerator extends MavenCommand {
         FileUtils.clearFileContent(this.output);
         FileUtils.deleteDirectory(projectAsWorkingDirectory());
 
-        runMavenCommandAndWait(withQuarkusPlugin(), withProjectGroupId(), withProjectArtifactId(), withProjectVersion(),
+        runMavenCommandAndWait(withQuarkusPluginCreate(), withProjectGroupId(), withProjectArtifactId(), withProjectVersion(),
                 withPlatformGroupId(), withPlatformArtifactId(), withExtensions());
         updateApplicationProperties();
         copyResources();
@@ -75,8 +74,8 @@ public class MavenGenerator extends MavenCommand {
         return withProperty(EXTENSIONS_PARAM, String.join(",", extensions));
     }
 
-    private String withQuarkusPlugin() {
-        return String.format(QUARKUS_PLUGIN, Configuration.QUARKUS_VERSION.get());
+    private String withQuarkusPluginCreate() {
+        return Configuration.QUARKUS_MAVEN_PLUGIN.get() + ":" + Configuration.QUARKUS_VERSION.get() + ":create";
     }
 
     private void updateApplicationProperties() {
