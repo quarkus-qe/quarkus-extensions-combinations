@@ -14,18 +14,9 @@ public class CheckCombinationsTest {
     @Test
     public void test() {
         ExtensionsProvider extensions = new ExtensionsProvider();
-        System.setProperty(Configuration.GROUP_OF.key(), "2");
-        System.out.println("2: " + extensions.generateCombinations().size());
-
-        System.setProperty(Configuration.GROUP_OF.key(), "3");
-        System.out.println("3: " + extensions.generateCombinations().size());
-
-        System.setProperty(Configuration.GROUP_OF.key(), "5");
-        System.out.println("5: " + extensions.generateCombinations().size());
-
-        System.setProperty(Configuration.GROUP_OF.key(), "1");
+        System.out.println("1: " + extensions.generateCombinations().size());
         List<Set<String>> combinations = extensions.generateCombinations();
-        System.out.println("1: " + combinations.size());
+        System.out.println("2: " + combinations.size());
         combinations.forEach(System.out::println);
     }
 }

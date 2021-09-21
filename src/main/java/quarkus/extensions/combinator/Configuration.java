@@ -18,7 +18,7 @@ public enum Configuration {
     VERIFY_DEV_MODE("ts.verify-dev-mode", "false"),
     COMBINATION_PLATFORM_GROUP_ID("quarkus.platform.group-id", "io.quarkus.platform"),
     COMBINATION_PLATFORM_ARTIFACT_ID("quarkus.platform.artifact-id", "quarkus-bom"),
-    QUARKUS_MAVEN_PLUGIN("quarkus.maven.plugin.artifact", "io.quarkus.platform:quarkus-maven-plugin"),
+    QUARKUS_MAVEN_PLUGIN("quarkus.maven.plugin.artifact", "io.quarkus:quarkus-maven-plugin"),
     QUARKUS_VERSION("quarkus.version", "999-SNAPSHOT");
 
     private final String key;
