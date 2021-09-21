@@ -29,7 +29,8 @@ class QuarkusExtensionsCombinationTest {
                 .generate()
                 .compile();
 
-        if (OsUtils.isWindows() && ExclusionsManager.get().isTestsDisabledOnWindows(extensions)) {
+        if (ExclusionsManager.get().isTestsDisabled(extensions)
+                || (OsUtils.isWindows() && ExclusionsManager.get().isTestsDisabledOnWindows(extensions))) {
             project.skipTests();
         }
 
