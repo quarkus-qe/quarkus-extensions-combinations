@@ -2,6 +2,7 @@ package quarkus.extensions.combinator.extensions;
 
 import static java.util.Arrays.asList;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -27,6 +28,7 @@ import quarkus.extensions.combinator.utils.Identity;
 public final class ExtensionsProvider implements ArgumentsProvider {
 
     private static final String QUARKUS = "quarkus-";
+    private static final List<String> EXTENSIONS_DISALLOW_SPECIAL_CHARS = Arrays.asList(":", ".");
 
     private static final List<Identity<List<Set<String>>>> COMBINATION_FUNCTIONS = asList(randomSort(), limit());
 
@@ -73,7 +75,7 @@ public final class ExtensionsProvider implements ArgumentsProvider {
     }
 
     private Predicate<String> byIsAnExtension() {
-        return line -> line.contains(QUARKUS);
+        return line -> line.contains(QUARKUS) && EXTENSIONS_DISALLOW_SPECIAL_CHARS.stream().noneMatch(line::contains);
     }
 
     private Predicate<String> byIsNotExcluded() {
