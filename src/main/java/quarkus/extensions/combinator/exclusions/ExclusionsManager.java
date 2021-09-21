@@ -19,9 +19,11 @@ public class ExclusionsManager {
     private static final Logger LOG = Logger.getLogger(ExclusionsManager.class.getName());
     private static final String EXCLUSIONS_FILE = "exclusions.properties";
     private static final String SKIP_ALL_VALUE = "skip-all";
+    private static final String SKIP_TESTS_VALUE = "skip-tests";
     private static final String SKIP_TESTS_ON_WINDOWS = "skip-only-tests-on-windows";
 
     private final List<Set<String>> skipCombinations = new ArrayList<>();
+    private final List<Set<String>> skipTestsCombinations = new ArrayList<>();
     private final List<Set<String>> skipTestsOnWindowsCombinations = new ArrayList<>();
 
     private ExclusionsManager() {
@@ -31,6 +33,11 @@ public class ExclusionsManager {
     public boolean isNotExcluded(Set<String> combination) {
         return skipCombinations.isEmpty()
                 || !skipCombinations.stream().anyMatch(excluded -> combination.containsAll(excluded));
+    }
+
+    public boolean isTestsDisabled(Set<String> combination) {
+        return !skipTestsCombinations.isEmpty()
+                && skipTestsCombinations.stream().anyMatch(excluded -> combination.containsAll(excluded));
     }
 
     public boolean isTestsDisabledOnWindows(Set<String> combination) {
@@ -51,6 +58,8 @@ public class ExclusionsManager {
                 Set<String> combination = Stream.of(((String) entry.getKey()).split(",")).collect(Collectors.toSet());
                 if (SKIP_ALL_VALUE.equalsIgnoreCase(rule)) {
                     skipCombinations.add(combination);
+                } else if (SKIP_TESTS_VALUE.equalsIgnoreCase(rule)) {
+                    skipTestsCombinations.add(combination);
                 } else if (SKIP_TESTS_ON_WINDOWS.equalsIgnoreCase(rule)) {
                     skipTestsOnWindowsCombinations.add(combination);
                 }
