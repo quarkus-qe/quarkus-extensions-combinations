@@ -3,12 +3,10 @@ package quarkus.extensions.combinator;
 import java.util.List;
 import java.util.Set;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import quarkus.extensions.combinator.extensions.ExtensionsProvider;
 
-@Disabled
 public class CheckCombinationsTest {
 
     @Test
