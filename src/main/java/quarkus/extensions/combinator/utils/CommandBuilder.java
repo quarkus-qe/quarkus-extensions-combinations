@@ -21,6 +21,7 @@ public class CommandBuilder {
     private final List<String> command;
 
     private File workingDirectory;
+    private File outputFile;
     private BiConsumer<String, InputStream> outputConsumer = logOutput();
 
     public CommandBuilder(String... command) {
@@ -33,6 +34,7 @@ public class CommandBuilder {
     }
 
     public CommandBuilder outputToFile(File file) {
+        this.outputFile = file;
         outputConsumer = fileOutput(file);
         return this;
     }
@@ -62,7 +64,8 @@ public class CommandBuilder {
 
     public Process run() {
         try {
-            LOG.info("Running: " + String.join(" ", command));
+            printCommand();
+
             ProcessBuilder pb = new ProcessBuilder()
                     .redirectErrorStream(true)
                     .command(command);
@@ -88,6 +91,14 @@ public class CommandBuilder {
             }
         } catch (Exception ex) {
             throw new RuntimeException(ex);
+        }
+    }
+
+    private void printCommand() {
+        String fullCommand = "Running: " + String.join(" ", command);
+        LOG.info(fullCommand);
+        if (outputFile != null) {
+            FileUtils.appendLineIntoFile(fullCommand, outputFile);
         }
     }
 
