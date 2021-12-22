@@ -7,6 +7,8 @@ jobs:
   linux-build-released-jvm:
     name: Linux - JVM build - released Quarkus
     runs-on: ubuntu-latest
+    env:
+      TESTCONTAINERS_RYUK_DISABLED: true
     strategy:
       matrix:
         java: [ 11 ]
@@ -40,6 +42,8 @@ jobs:
     needs: [ linux-build-released-jvm ]
     if: false # always skip job as it's failing due to memory requirements
     runs-on: ubuntu-latest
+    env:
+      TESTCONTAINERS_RYUK_DISABLED: true
     strategy:
       matrix:
         java: [ 11 ]
@@ -72,6 +76,8 @@ jobs:
     name: Linux - Native build - released Quarkus
     needs: [ linux-build-released-dev ]
     runs-on: ubuntu-latest
+    env:
+      TESTCONTAINERS_RYUK_DISABLED: true
     strategy:
       matrix:
         java: [ 11 ]
@@ -103,6 +109,8 @@ jobs:
   windows-build-released-jvm:
     name: Windows - JVM build - released Quarkus
     runs-on: windows-latest
+    env:
+      TESTCONTAINERS_RYUK_DISABLED: true
     strategy:
       matrix:
         java: [ 11 ]
@@ -138,6 +146,8 @@ jobs:
     needs: [ windows-build-released-jvm ]
     if: false # always skip job as it's failing due to memory requirements
     runs-on: windows-latest
+    env:
+      TESTCONTAINERS_RYUK_DISABLED: true
     strategy:
       matrix:
         java: [ 11 ]
@@ -172,6 +182,8 @@ jobs:
     name: Windows - Native build - released Quarkus
     needs: [ windows-build-released-dev ]
     runs-on: windows-latest
+    env:
+      TESTCONTAINERS_RYUK_DISABLED: true
     strategy:
       matrix:
         java: [ 11 ]
