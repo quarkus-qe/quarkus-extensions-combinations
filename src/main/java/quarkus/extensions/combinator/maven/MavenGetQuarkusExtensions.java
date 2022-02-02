@@ -14,7 +14,7 @@ public class MavenGetQuarkusExtensions extends MavenCommand {
         extensions.clear();
         String quarkusMavenPlugin = getQuarkusMavenPlugin();
         runMavenCommandAndWait("-f", "target/test-classes/list-extensions.pom.xml", quarkusMavenPlugin + ":list-extensions",
-                "-Dformat=id");
+                "-Dformat=id", withoutQuarkusRegistryClient());
         return extensions;
     }
 
