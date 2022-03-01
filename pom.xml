@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.quarkus.qe</groupId>
     <artifactId>quarkus-extensions-combinator</artifactId>
@@ -17,8 +16,8 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
         <quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
-        <quarkus.version>2.7.0.CR1</quarkus.version>
-        <quarkus.ide-config.version>2.6.0.Final</quarkus.ide-config.version>
+        <quarkus.version>2.7.2.Final</quarkus.version>
+        <quarkus.ide-config.version>2.7.2.Final</quarkus.ide-config.version>
         <awaitility.version>4.1.1</awaitility.version>
         <rest-assured.version>4.5.1</rest-assured.version>
         <surefire-plugin.version>3.0.0-M5</surefire-plugin.version>
@@ -166,16 +165,12 @@
                         <quarkus.version>${quarkus.version}</quarkus.version>
                     </systemPropertyVariables>
                     <properties>
-                        <configurationParameters>
-                            junit.jupiter.execution.parallel.enabled = true
-                            <!-- Execute top-level classes in sequentially but their methods in parallel -->
-                            junit.jupiter.execution.parallel.mode.default = concurrent
-                            junit.jupiter.execution.parallel.mode.classes.default = same_thread
+                        <configurationParameters>junit.jupiter.execution.parallel.enabled = true
+                            <!-- Execute top-level classes in sequentially but their methods in parallel -->junit.jupiter.execution.parallel.mode.default = concurrent junit.jupiter.execution.parallel.mode.classes.default = same_thread
                         </configurationParameters>
                     </properties>
                     <!-- Configure Display name accordingly -->
-                    <statelessTestsetReporter
-                            implementation="org.apache.maven.plugin.surefire.extensions.junit5.JUnit5Xml30StatelessReporter">
+                    <statelessTestsetReporter implementation="org.apache.maven.plugin.surefire.extensions.junit5.JUnit5Xml30StatelessReporter">
                         <disable>false</disable>
                         <version>3.0</version>
                         <usePhrasedFileName>false</usePhrasedFileName>
