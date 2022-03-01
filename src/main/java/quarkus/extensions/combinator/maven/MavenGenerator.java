@@ -111,7 +111,7 @@ public class MavenGenerator extends MavenCommand {
         }
     }
 
-    private void adjustFileContent(Path path, String regex, String replacement){
+    private void adjustFileContent(Path path, String regex, String replacement) {
         if (Files.exists(path)) {
             String content = null;
             try {
@@ -119,7 +119,7 @@ public class MavenGenerator extends MavenCommand {
                 content = content.replaceAll(regex, replacement);
                 Files.write(path, content.getBytes(StandardCharsets.UTF_8));
             } catch (IOException ex) {
-                LOG.log( Level.SEVERE, ex.toString(), ex);
+                LOG.log(Level.SEVERE, ex.toString(), ex);
             }
         }
     }
