@@ -95,7 +95,7 @@ public final class ExtensionsProvider implements ArgumentsProvider {
     private Function<String, String> extractName() {
         return line -> {
             // Format output line from mvn list extensions command to a list of artifact ids
-            String id = line.trim().replace("[INFO] ✬ ", "");
+            String id = line.trim().substring("[INFO] ✬ ".length());
             // If the artifact id starts with `quarkus-`, we remove it for better readability and usage
             if (id.startsWith(QUARKUS)) {
                 id = StringUtils.substringAfter(id, QUARKUS);
