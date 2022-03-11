@@ -18,7 +18,7 @@
         <quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
         <quarkus.version>2.7.3.Final</quarkus.version>
         <quarkus.ide-config.version>2.7.2.Final</quarkus.ide-config.version>
-        <awaitility.version>4.1.1</awaitility.version>
+        <awaitility.version>4.2.0</awaitility.version>
         <rest-assured.version>4.5.1</rest-assured.version>
         <surefire-plugin.version>3.0.0-M5</surefire-plugin.version>
         <junit.version>5.8.2</junit.version>
