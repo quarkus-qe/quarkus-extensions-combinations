@@ -10,7 +10,7 @@ public enum Configuration {
     INCLUDES_COMBINATIONS_ONLY_WITH_EXTENSIONS("ts.includes-combinations-only-with-extensions", ""),
     LIMIT_EXTENSIONS("ts.limit-extensions", "-1"),
     RANDOM_SORT_EXTENSIONS("ts.random-sort-extensions", "true"),
-    GROUP_OF("ts.extensions-in-groups-of", "3"),
+    GROUP_OF("ts.extensions-in-groups-of", "2"),
     EXTENSIONS_ENDPOINT("ts.quarkus-extensions-endpoint", "https://code.quarkus.redhat.com/api/extensions"),
     COMBINATION_PROJECT_GROUP_ID("ts.combination-project-group-id", "io.quarkus.qe"),
     COMBINATION_PROJECT_VERSION("ts.combination-project-version", "1.0.0-SNAPSHOT"),
