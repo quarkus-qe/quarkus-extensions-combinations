@@ -87,6 +87,7 @@ public class CommandBuilder {
             Process process = run();
             int result = process.waitFor();
             if (result != 0) {
+                printFailedCommand(result);
                 throw new RuntimeException(description + " failed (executed " + command + ", return code " + result + ")");
             }
         } catch (Exception ex) {
@@ -97,6 +98,14 @@ public class CommandBuilder {
     private void printCommand() {
         String fullCommand = "Running: " + String.join(" ", command);
         LOG.info(fullCommand);
+        if (outputFile != null) {
+            FileUtils.appendLineIntoFile(fullCommand, outputFile);
+        }
+    }
+
+    private void printFailedCommand(int result) {
+        String fullCommand = "FAILED (return code " + result + ") when running: " + String.join(" ", command);
+        LOG.severe(fullCommand);
         if (outputFile != null) {
             FileUtils.appendLineIntoFile(fullCommand, outputFile);
         }
