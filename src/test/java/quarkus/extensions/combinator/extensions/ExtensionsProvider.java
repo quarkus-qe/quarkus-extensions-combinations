@@ -9,6 +9,7 @@ import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -27,6 +28,8 @@ import quarkus.extensions.combinator.utils.Identity;
 
 public final class ExtensionsProvider implements ArgumentsProvider {
 
+    private static final Logger LOG = Logger.getLogger(ExtensionsProvider.class.getName());
+
     private static final String QUARKUS = "quarkus-";
     private static final List<String> EXTENSIONS_DISALLOW_SPECIAL_CHARS = Arrays.asList(":", ".");
 
@@ -38,11 +41,15 @@ public final class ExtensionsProvider implements ArgumentsProvider {
         MavenGetQuarkusExtensions mavenCommand = new MavenGetQuarkusExtensions();
         List<String> output = mavenCommand.getExtensions();
 
+        LOG.info("Available extensions size: " + output.size());
         this.extensions = output.stream()
                 .filter(byIsAnExtension().and(byIsNotExcluded()))
                 .map(extractName())
+                //                .peek(System.out::println)
                 .filter(bySupportedIfEnabled())
+                //                .peek(System.out::println)
                 .collect(Collectors.toList());
+        LOG.info("Filtered extensions size: " + extensions.size());
     }
 
     @Override
