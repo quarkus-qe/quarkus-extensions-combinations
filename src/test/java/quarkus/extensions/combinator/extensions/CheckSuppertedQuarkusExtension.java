@@ -9,7 +9,7 @@ import quarkus.extensions.combinator.Configuration;
 
 public final class CheckSuppertedQuarkusExtension {
 
-    private static final String SUPPORTED_TAG = "supported";
+    private static final String SUPPORTED_TAG = "redhat-support:supported";
 
     private static final CheckSuppertedQuarkusExtension INSTANCE = new CheckSuppertedQuarkusExtension();
 
