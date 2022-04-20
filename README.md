@@ -135,6 +135,11 @@ operator-sdk=skip-tests
 reactive-pg-client=skip-only-tests-on-windows
 ```
 
+## Failed combinations
+
+You can find a list of all failed combinations of the Quarkus extensions in `target/failed.log`, run
+logs are also stored in a same folder (e.g. `target/your-extension-name.log`).
+
 # How to contribute
 
 The build instructions are available in the [contribution guide](CONTRIBUTING.md).
