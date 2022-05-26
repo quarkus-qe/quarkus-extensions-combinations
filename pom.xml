@@ -4,9 +4,8 @@
     <groupId>io.quarkus.qe</groupId>
     <artifactId>quarkus-extensions-combinator</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
     <properties>
-        <commons-io.version>2.11.0</commons-io.version>
-        <commons-lang3.version>3.12.0</commons-lang3.version>
         <compiler-plugin.version>3.10.1</compiler-plugin.version>
         <guava.version>31.1-jre</guava.version>
         <jackson-databind.version>2.13.3</jackson-databind.version>
@@ -16,12 +15,9 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
         <quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
-        <quarkus.version>2.7.5.Final</quarkus.version>
+        <quarkus.platform.version>2.7.5.Final</quarkus.platform.version>
         <quarkus.ide-config.version>2.7.2.Final</quarkus.ide-config.version>
-        <awaitility.version>4.2.0</awaitility.version>
-        <rest-assured.version>5.0.1</rest-assured.version>
         <surefire-plugin.version>3.0.0-M6</surefire-plugin.version>
-        <junit.version>5.8.2</junit.version>
         <formatter-maven-plugin.version>2.18.0</formatter-maven-plugin.version>
         <impsort-maven-plugin.version>1.7.0</impsort-maven-plugin.version>
         <xml-format-maven-plugin>3.2.1</xml-format-maven-plugin>
@@ -30,16 +26,25 @@
         <src.sort.goal>sort</src.sort.goal>
         <xml.format.goal>xml-format</xml.format.goal>
     </properties>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>${quarkus.platform.group-id}</groupId>
+                <artifactId>${quarkus.platform.artifact-id}</artifactId>
+                <version>${quarkus.platform.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
     <dependencies>
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>${commons-io.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>${commons-lang3.version}</version>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
@@ -47,27 +52,18 @@
             <version>${guava.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.awaitility</groupId>
-            <artifactId>awaitility</artifactId>
-            <version>${awaitility.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-            <version>${junit.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-params</artifactId>
-            <version>${junit.version}</version>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-junit5</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>rest-assured</artifactId>
-            <version>${rest-assured.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.awaitility</groupId>
+            <artifactId>awaitility</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -160,9 +156,9 @@
                 <version>${surefire-plugin.version}</version>
                 <configuration>
                     <systemPropertyVariables>
-                        <quarkus-plugin.version>${quarkus.version}</quarkus-plugin.version>
+                        <quarkus-plugin.version>${quarkus.platform.version}</quarkus-plugin.version>
                         <quarkus.platform.artifact-id>${quarkus.platform.artifact-id}</quarkus.platform.artifact-id>
-                        <quarkus.version>${quarkus.version}</quarkus.version>
+                        <quarkus.version>${quarkus.platform.version}</quarkus.version>
                     </systemPropertyVariables>
                     <properties>
                         <configurationParameters>junit.jupiter.execution.parallel.enabled = true
@@ -211,9 +207,9 @@
                         <version>${surefire-plugin.version}</version>
                         <configuration combine.self="override">
                             <systemPropertyVariables>
-                                <quarkus-plugin.version>${quarkus.version}</quarkus-plugin.version>
+                                <quarkus-plugin.version>${quarkus.platform.version}</quarkus-plugin.version>
                                 <quarkus.platform.artifact-id>${quarkus.platform.artifact-id}</quarkus.platform.artifact-id>
-                                <quarkus.version>${quarkus.version}</quarkus.version>
+                                <quarkus.version>${quarkus.platform.version}</quarkus.version>
                             </systemPropertyVariables>
                         </configuration>
                     </plugin>
