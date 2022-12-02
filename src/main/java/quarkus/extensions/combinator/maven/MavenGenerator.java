@@ -52,7 +52,7 @@ public class MavenGenerator extends MavenCommand {
         updateApplicationProperties();
         dropEntityAnnotations();
         copyResources();
-        return new MavenProject(output, projectAsWorkingDirectory());
+        return new MavenProject(output, projectAsWorkingDirectory(), extensions);
     }
 
     @Override
