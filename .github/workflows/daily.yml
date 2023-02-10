@@ -122,9 +122,10 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
-      - name: Install JDK {{ matrix.java }}
-        uses: joschi/setup-jdk@e87a7cec853d2dd7066adf837fe12bf0f3d45e52
+      - name: Setup Java and Maven
+        uses: s4u/setup-maven-action@v1.6.0
         with:
+          maven-version: 3.8.7
           java-version: ${{ matrix.java }}
       - name: Run Test Suite
         shell: bash
