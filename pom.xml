@@ -16,7 +16,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
         <quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
-        <quarkus.version>2.16.2.Final</quarkus.version>
+        <quarkus.version>2.16.6.Final</quarkus.version>
         <quarkus.ide-config.version>2.7.2.Final</quarkus.ide-config.version>
         <awaitility.version>4.2.0</awaitility.version>
         <rest-assured.version>5.3.0</rest-assured.version>
