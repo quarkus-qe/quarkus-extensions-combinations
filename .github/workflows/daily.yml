@@ -2,7 +2,7 @@ name: "Daily Build"
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 23 * * *'
+    - cron: '0 20 * * *'
 jobs:
   linux-build-released-jvm:
     name: Linux - JVM build - released Quarkus
