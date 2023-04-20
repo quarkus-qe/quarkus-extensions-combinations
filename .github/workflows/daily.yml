@@ -37,37 +37,6 @@ jobs:
         with:
           name: ci-artifacts
           path: artifacts-linux-jvm${{ matrix.java }}.zip
-  linux-build-released-dev:
-    name: Linux - DEV build - released Quarkus
-    needs: [ linux-build-released-jvm ]
-    if: false # always skip job as it's failing due to memory requirements
-    runs-on: ubuntu-latest
-    env:
-      TESTCONTAINERS_RYUK_DISABLED: true
-    strategy:
-      matrix:
-        java: [ 11 ]
-    steps:
-      - uses: actions/checkout@v3
-      - name: Install JDK ${{ matrix.java }}
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'temurin'
-          java-version: ${{ matrix.java }}
-          check-latest: true
-          cache: 'maven'
-      - name: Run Test Suite
-        run: mvn -s .github/mvn-settings.xml clean test -Dts.limit-extensions=20 -Dts.extensions-in-groups-of=10 -Dts.verify-dev-mode=true -Ddisable-parallel
-      - name: Zip Artifacts
-        if: failure()
-        run: |
-          zip -r artifacts-linux-dev${{ matrix.java }}.zip . -i '**/*-reports/*.xml' '**/*.log'
-      - name: Archive artifacts
-        if: failure()
-        uses: actions/upload-artifact@v1
-        with:
-          name: ci-artifacts
-          path: artifacts-linux-dev${{ matrix.java }}.zip
   linux-build-released-native:
     name: Linux - Native build - released Quarkus
     needs: [ linux-build-released-dev ]
@@ -134,40 +103,6 @@ jobs:
         with:
           name: ci-artifacts
           path: artifacts-windows-jvm${{ matrix.java }}.tar
-  windows-build-released-dev:
-    name: Windows - DEV build - released Quarkus
-    needs: [ windows-build-released-jvm ]
-    if: false # always skip job as it's failing due to memory requirements
-    runs-on: windows-latest
-    env:
-      TESTCONTAINERS_RYUK_DISABLED: true
-    strategy:
-      matrix:
-        java: [ 11 ]
-    steps:
-      - uses: actions/checkout@v3
-      - name: Install JDK ${{ matrix.java }}
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'temurin'
-          java-version: ${{ matrix.java }}
-          check-latest: true
-          cache: 'maven'
-      - name: Run Test Suite
-        shell: bash
-        run: mvn -s .github/mvn-settings.xml clean test -Dts.limit-extensions=20 -Dts.extensions-in-groups-of=10 -Dts.verify-dev-mode=true -Dformat.skip=true -Ddisable-parallel
-      - name: Zip Artifacts
-        if: failure()
-        shell: bash
-        run: |
-          # Disambiguate windows find from cygwin find
-          /usr/bin/find . -print | grep -e "-reports" -e ".log" | grep -v "git" | tar -czf artifacts-windows-jvm${{ matrix.java }}.tar -T -
-      - name: Archive artifacts
-        uses: actions/upload-artifact@v1
-        if: failure()
-        with:
-          name: ci-artifacts
-          path: artifacts-windows-dev${{ matrix.java }}.tar
   windows-build-released-native:
     name: Windows - Native build - released Quarkus
     needs: [ windows-build-released-dev ]
