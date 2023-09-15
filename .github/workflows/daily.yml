@@ -41,7 +41,7 @@ jobs:
     strategy:
       matrix:
         java: [ 17 ]
-        graalvm-version: ["22.3.2"]
+        graalvm-version: ["mandrel-23.0.1.2-Final"]
     steps:
       - uses: actions/checkout@v3
       - name: Install JDK ${{ matrix.java }}
@@ -111,7 +111,7 @@ jobs:
     strategy:
       matrix:
         java: [ 17 ]
-        graalvm-version: ["22.3.2"]
+        graalvm-version: ["mandrel-23.0.1.2-Final"]
     steps:
       - uses: actions/checkout@v3
       - name: Install JDK ${{ matrix.java }}
