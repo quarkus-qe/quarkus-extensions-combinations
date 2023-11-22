@@ -21,9 +21,9 @@ public abstract class MavenCommand {
     private static final String QUARKUS_PLATFORM_VERSION = "quarkus.platform.version";
     private static final String QUARKUS_PLATFORM_GROUP_ID = "quarkus.platform.group-id";
     private static final String QUARKUS_PLATFORM_ARTIFACT_ID = "quarkus.platform.artifact-id";
-    private static final List<String> PROPERTIES_TO_PROPAGATE = Arrays.asList(MAVEN_REPO_LOCAL, QUARKUS_PLUGIN_VERSION,
-            QUARKUS_PLATFORM_VERSION, QUARKUS_PLATFORM_GROUP_ID, QUARKUS_PLATFORM_ARTIFACT_ID);
     private static final String QUARKUS_REGISTRY_CLIENT = "quarkusRegistryClient";
+    private static final List<String> PROPERTIES_TO_PROPAGATE = Arrays.asList(MAVEN_REPO_LOCAL, QUARKUS_PLUGIN_VERSION,
+            QUARKUS_PLATFORM_VERSION, QUARKUS_PLATFORM_GROUP_ID, QUARKUS_PLATFORM_ARTIFACT_ID, QUARKUS_REGISTRY_CLIENT);
 
     private final File workingDirectory;
 
@@ -53,10 +53,6 @@ public abstract class MavenCommand {
 
     protected String withProperty(String property, String value) {
         return String.format("-D%s=%s", property, value);
-    }
-
-    protected String withoutQuarkusRegistryClient() {
-        return withProperty(QUARKUS_REGISTRY_CLIENT, "false");
     }
 
     private CommandBuilder configureMavenCommand(String[] params) {
