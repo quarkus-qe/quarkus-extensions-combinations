@@ -14,15 +14,19 @@ import quarkus.extensions.combinator.utils.OsUtils;
 
 public class ExclusionsManager {
 
-    public static final ExclusionsManager EXCLUSIONS_MANAGER = new ExclusionsManager();
+    private static final ExclusionsManager EXCLUSIONS_MANAGER = new ExclusionsManager();
 
     private static final Logger LOG = Logger.getLogger(ExclusionsManager.class.getName());
     private static final String EXCLUSIONS_FILE = "exclusions.properties";
     private static final String SKIP_ALL_VALUE = "skip-all";
+    private static final String SKIP_DEV_MODE_VALUE = "skip-dev";
+    private static final String SKIP_NATIVE_MODE_VALUE = "skip-native";
     private static final String SKIP_TESTS_VALUE = "skip-tests";
     private static final String SKIP_TESTS_ON_WINDOWS = "skip-only-tests-on-windows";
 
     private final List<Set<String>> skipCombinations = new ArrayList<>();
+    private final List<Set<String>> skipDevModeCombinations = new ArrayList<>();
+    private final List<Set<String>> skipNativeModeCombinations = new ArrayList<>();
     private final List<Set<String>> skipTestsCombinations = new ArrayList<>();
     private final List<Set<String>> skipTestsOnWindowsCombinations = new ArrayList<>();
 
@@ -33,6 +37,16 @@ public class ExclusionsManager {
     public boolean isNotExcluded(Set<String> combination) {
         return skipCombinations.isEmpty()
                 || !skipCombinations.stream().anyMatch(excluded -> combination.containsAll(excluded));
+    }
+
+    public boolean isDevModeDisabled(Set<String> combination) {
+        return !skipDevModeCombinations.isEmpty()
+                && skipDevModeCombinations.stream().anyMatch(excluded -> combination.containsAll(excluded));
+    }
+
+    public boolean isNativeModeDisabled(Set<String> combination) {
+        return !skipNativeModeCombinations.isEmpty()
+                && skipNativeModeCombinations.stream().anyMatch(excluded -> combination.containsAll(excluded));
     }
 
     public boolean isTestsDisabled(Set<String> combination) {
@@ -58,6 +72,10 @@ public class ExclusionsManager {
                 Set<String> combination = Stream.of(((String) entry.getKey()).split(",")).collect(Collectors.toSet());
                 if (SKIP_ALL_VALUE.equalsIgnoreCase(rule)) {
                     skipCombinations.add(combination);
+                } else if (SKIP_DEV_MODE_VALUE.equalsIgnoreCase(rule)) {
+                    skipDevModeCombinations.add(combination);
+                } else if (SKIP_NATIVE_MODE_VALUE.equalsIgnoreCase(rule)) {
+                    skipNativeModeCombinations.add(combination);
                 } else if (SKIP_TESTS_VALUE.equalsIgnoreCase(rule)) {
                     skipTestsCombinations.add(combination);
                 } else if (SKIP_TESTS_ON_WINDOWS.equalsIgnoreCase(rule)) {

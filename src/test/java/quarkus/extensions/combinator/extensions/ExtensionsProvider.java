@@ -77,7 +77,7 @@ public final class ExtensionsProvider implements ArgumentsProvider {
         return combination -> {
             List<String> includesExtensions = Configuration.INCLUDES_COMBINATIONS_ONLY_WITH_EXTENSIONS.getAsList();
             return includesExtensions.isEmpty()
-                    || includesExtensions.stream().allMatch(extension -> combination.contains(extension));
+                    || includesExtensions.stream().anyMatch(extension -> combination.contains(extension));
         };
     }
 
