@@ -48,7 +48,7 @@ public class MavenGenerator extends MavenCommand {
         FileUtils.deleteDirectory(projectAsWorkingDirectory());
 
         runMavenCommandAndWait(withQuarkusPluginCreate(), withProjectGroupId(), withProjectArtifactId(), withProjectVersion(),
-                withPlatformGroupId(), withPlatformArtifactId(), withExtensions(), withoutQuarkusRegistryClient());
+                withPlatformGroupId(), withPlatformArtifactId(), withExtensions());
         updateApplicationProperties();
         dropEntityAnnotations();
         copyResources();

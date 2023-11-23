@@ -61,7 +61,7 @@ jobs:
           components: 'native-image'
           github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Run Test Suite
-        run: mvn -e -s .github/mvn-settings.xml clean test -Dts.limit-extensions=20 -Dts.extensions-in-groups-of=5 -Dts.verify-native-mode=true -Ddisable-parallel
+        run: mvn -e -s .github/mvn-settings.xml clean test -Dts.limit-extensions=20 -Dts.extensions-in-groups-of=4 -Dts.verify-native-mode=true -Ddisable-parallel
       - name: Zip Artifacts
         if: failure()
         run: |
