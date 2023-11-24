@@ -36,12 +36,12 @@ class QuarkusExtensionsCombinationTest {
 
         project.verify();
 
-        if (Configuration.VERIFY_DEV_MODE.getAsBoolean()) {
+        if (Configuration.VERIFY_DEV_MODE.getAsBoolean() && !ExclusionsManager.get().isDevModeDisabled(extensions)) {
             project.devMode();
             assertApplicationInDevMode(project);
         }
 
-        if (Configuration.VERIFY_NATIVE_MODE.getAsBoolean()) {
+        if (Configuration.VERIFY_NATIVE_MODE.getAsBoolean() && !ExclusionsManager.get().isNativeModeDisabled(extensions)) {
             project.nativeMode();
         }
 
