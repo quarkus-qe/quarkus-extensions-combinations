@@ -23,7 +23,7 @@ jobs:
           check-latest: true
           cache: 'maven'
       - name: Run Test Suite
-        run: mvn -s .github/mvn-settings.xml clean test -Dts.limit-extensions=200 -Dts.extensions-in-groups-of=2
+        run: mvn -ntp -s .github/mvn-settings.xml clean test -DquarkusRegistryClient=false -Dts.limit-extensions=200 -Dts.extensions-in-groups-of=2
       - name: Zip Artifacts
         if: failure()
         run: |
@@ -61,7 +61,7 @@ jobs:
           components: 'native-image'
           github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Run Test Suite
-        run: mvn -e -s .github/mvn-settings.xml clean test -Dts.limit-extensions=20 -Dts.extensions-in-groups-of=4 -Dts.verify-native-mode=true -Ddisable-parallel
+        run: mvn -ntp -e -s .github/mvn-settings.xml clean test -DquarkusRegistryClient=false -Dts.limit-extensions=20 -Dts.extensions-in-groups-of=5 -Dts.verify-native-mode=true -Ddisable-parallel
       - name: Zip Artifacts
         if: failure()
         run: |
@@ -91,7 +91,7 @@ jobs:
           cache: 'maven'
       - name: Run Test Suite
         shell: bash
-        run: mvn -s .github/mvn-settings.xml clean test -Dts.limit-extensions=200 -Dts.extensions-in-groups-of=2 -Dformat.skip=true
+        run: mvn -ntp -s .github/mvn-settings.xml clean test -DquarkusRegistryClient=false -Dts.limit-extensions=200 -Dts.extensions-in-groups-of=2 -Dformat.skip=true
       - name: Zip Artifacts
         if: failure()
         shell: bash
@@ -143,7 +143,7 @@ jobs:
         # Otherwise native-image command throws errors
         # [ERROR] ...  CreateProcess error=267, The directory name is invalid
         # Fatal error: java.lang.RuntimeException: There was an error linking the native image: Linker command exited with 2
-        run: mvn -e -s .github/mvn-settings.xml clean test -Dts.limit-extensions=20 -Dts.extensions-in-groups-of=1 -Dts.verify-native-mode=true -Dformat.skip=true -Ddisable-parallel
+        run: mvn -ntp -e -s .github/mvn-settings.xml clean test -DquarkusRegistryClient=false -Dts.limit-extensions=20 -Dts.extensions-in-groups-of=1 -Dts.verify-native-mode=true -Dformat.skip=true -Ddisable-parallel
       - name: Zip Artifacts
         if: failure()
         shell: bash
