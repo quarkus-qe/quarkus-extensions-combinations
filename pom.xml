@@ -164,10 +164,8 @@
                         <quarkus.version>${quarkus.version}</quarkus.version>
                     </systemPropertyVariables>
                     <properties>
-                        <configurationParameters>junit.jupiter.execution.parallel.enabled = true
-                            <!-- Execute top-level classes in sequentially but their methods in parallel -->junit.jupiter.execution.parallel.mode.default = concurrent
-                            junit.jupiter.execution.parallel.mode.classes.default = same_thread
-                        </configurationParameters>
+                        <!-- Execute top-level classes in sequentially but their methods in parallel -->
+                        <configurationParameters>junit.jupiter.execution.parallel.enabled = true junit.jupiter.execution.parallel.mode.default = concurrent junit.jupiter.execution.parallel.mode.classes.default = same_thread</configurationParameters>
                     </properties>
                     <!-- Configure Display name accordingly -->
                     <statelessTestsetReporter implementation="org.apache.maven.plugin.surefire.extensions.junit5.JUnit5Xml30StatelessReporter">
