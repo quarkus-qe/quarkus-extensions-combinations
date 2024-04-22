@@ -42,7 +42,8 @@ jobs:
     strategy:
       matrix:
         java: [ 17 ]
-        graalvm-version: ["mandrel-23.0.1.2-Final"]
+        graalvm-version: ["mandrel-23.1.2.0-Final"]
+        graalvm-java-version: [ "21" ]
     steps:
       - uses: actions/checkout@v3
       - name: Install JDK ${{ matrix.java }}
@@ -57,7 +58,7 @@ jobs:
         uses: graalvm/setup-graalvm@v1
         with:
           version: ${{ matrix.graalvm-version }}
-          java-version: ${{ matrix.java }}
+          java-version: ${{ matrix.graalvm-java-version }}
           components: 'native-image'
           github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Run Test Suite
@@ -112,7 +113,8 @@ jobs:
     strategy:
       matrix:
         java: [ 17 ]
-        graalvm-version: ["mandrel-23.0.1.2-Final"]
+        graalvm-version: ["mandrel-23.1.2.0-Final"]
+        graalvm-java-version: [ "21" ]
     steps:
       - uses: actions/checkout@v3
       - name: Install JDK ${{ matrix.java }}
@@ -130,7 +132,7 @@ jobs:
         uses: graalvm/setup-graalvm@v1
         with:
           version: ${{ matrix.graalvm-version }}
-          java-version: ${{ matrix.java }}
+          java-version: ${{ matrix.graalvm-java-version }}
           components: 'native-image'
           github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Configure Pagefile
