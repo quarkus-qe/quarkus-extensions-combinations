@@ -42,7 +42,8 @@ jobs:
     strategy:
       matrix:
         java: [ 17 ]
-        graalvm-version: ["mandrel-23.0.1.2-Final"]
+        graalvm-version: [ "mandrel-latest" ]
+        graalvm-java-version: [ "21" ]
     steps:
       - uses: actions/checkout@v3
       - name: Install JDK ${{ matrix.java }}
@@ -57,8 +58,7 @@ jobs:
         uses: graalvm/setup-graalvm@v1
         with:
           version: ${{ matrix.graalvm-version }}
-          java-version: ${{ matrix.java }}
-          components: 'native-image'
+          java-version: ${{ matrix.graalvm-java-version }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Run Test Suite
         run: mvn -ntp -e -s .github/mvn-settings.xml clean test -DquarkusRegistryClient=false -Dts.limit-extensions=20 -Dts.extensions-in-groups-of=5 -Dts.verify-native-mode=true -Ddisable-parallel
