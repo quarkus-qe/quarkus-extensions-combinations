@@ -14,9 +14,9 @@ jobs:
       matrix:
         java: [ 17 ]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Install JDK ${{ matrix.java }}
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: ${{ matrix.java }}
@@ -30,7 +30,7 @@ jobs:
           zip -r artifacts-linux-jvm${{ matrix.java }}.zip . -i '**/*-reports/*.xml' '**/*.log'
       - name: Archive artifacts
         if: failure()
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v4
         with:
           name: ci-artifacts
           path: artifacts-linux-jvm${{ matrix.java }}.zip
@@ -45,9 +45,9 @@ jobs:
         graalvm-version: ["mandrel-23.1.2.0-Final"]
         graalvm-java-version: [ "21" ]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Install JDK ${{ matrix.java }}
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: ${{ matrix.java }}
@@ -69,7 +69,7 @@ jobs:
           zip -r artifacts-linux-native${{ matrix.java }}.zip . -i '**/*-reports/*.xml' '**/*.log'
       - name: Archive artifacts
         if: failure()
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v4
         with:
           name: ci-artifacts
           path: artifacts-linux-native${{ matrix.java }}.zip
@@ -82,9 +82,9 @@ jobs:
       matrix:
         java: [ 17 ]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Install JDK ${{ matrix.java }}
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: ${{ matrix.java }}
@@ -100,7 +100,7 @@ jobs:
           # Disambiguate windows find from cygwin find
           /usr/bin/find . -print | grep -e "-reports" -e ".log" | grep -v "git" | tar -czf artifacts-windows-jvm${{ matrix.java }}.tar -T -
       - name: Archive artifacts
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: ci-artifacts
@@ -116,9 +116,9 @@ jobs:
         graalvm-version: ["mandrel-23.1.2.0-Final"]
         graalvm-java-version: [ "21" ]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Install JDK ${{ matrix.java }}
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: ${{ matrix.java }}
@@ -138,7 +138,7 @@ jobs:
       - name: Configure Pagefile
         # Increased the page-file size due to memory-consumption of native-image command
         # For details see https://github.com/actions/virtual-environments/issues/785
-        uses: al-cheb/configure-pagefile-action@v1.3
+        uses: al-cheb/configure-pagefile-action@v1.4
       - name: Run Test Suite
         shell: cmd
         # Windows have path limits and thus ts.extensions-in-groups-of is set to 1, generated app name is based on the extensions names
@@ -153,7 +153,7 @@ jobs:
           # Disambiguate windows find from cygwin find
           /usr/bin/find . -print | grep -e "-reports" -e ".log" | grep -v "git" | tar -czf artifacts-windows-native${{ matrix.java }}.tar -T -
       - name: Archive artifacts
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: ci-artifacts
