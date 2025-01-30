@@ -112,7 +112,8 @@ jobs:
     strategy:
       matrix:
         java: [ 17 ]
-        graalvm-version: ["mandrel-23.0.1.2-Final"]
+        graalvm-version: [ "mandrel-latest" ]
+        graalvm-java-version: [ "21" ]
     steps:
       - uses: actions/checkout@v4
       - name: Install JDK ${{ matrix.java }}
@@ -130,8 +131,7 @@ jobs:
         uses: graalvm/setup-graalvm@v1
         with:
           version: ${{ matrix.graalvm-version }}
-          java-version: ${{ matrix.java }}
-          components: 'native-image'
+          java-version: ${{ matrix.graalvm-java-version }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Configure Pagefile
         # Increased the page-file size due to memory-consumption of native-image command
