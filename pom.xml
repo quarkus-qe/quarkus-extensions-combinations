@@ -19,7 +19,7 @@
         <quarkus.version>3.18.1</quarkus.version>
         <quarkus.ide-config.version>3.18.1</quarkus.ide-config.version>
         <awaitility.version>4.2.1</awaitility.version>
-        <rest-assured.version>5.5.0</rest-assured.version>
+        <rest-assured.version>5.5.1</rest-assured.version>
         <surefire-plugin.version>3.5.2</surefire-plugin.version>
         <junit.version>5.11.4</junit.version>
         <formatter-maven-plugin.version>2.25.0</formatter-maven-plugin.version>
