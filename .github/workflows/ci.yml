@@ -1,9 +1,6 @@
-name: "Daily Build"
+name: "Pull Request CI"
 on:
-  pull_request:
-  workflow_dispatch:
-  schedule:
-    - cron: '0 20 * * *'
+  - pull_request
 jobs:
   linux-build-released-jvm:
     name: Linux - JVM build - released Quarkus
