@@ -22,7 +22,7 @@
         <rest-assured.version>5.5.1</rest-assured.version>
         <surefire-plugin.version>3.5.2</surefire-plugin.version>
         <junit.version>5.12.1</junit.version>
-        <formatter-maven-plugin.version>2.25.0</formatter-maven-plugin.version>
+        <formatter-maven-plugin.version>2.26.0</formatter-maven-plugin.version>
         <impsort-maven-plugin.version>1.12.0</impsort-maven-plugin.version>
         <xml-format-maven-plugin>4.1.0</xml-format-maven-plugin>
         <!-- Default values for format -->
