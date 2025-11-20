@@ -21,7 +21,7 @@ public class MavenProject extends MavenCommand {
     private static final String RANDOM_PORT_FOR_TESTS = "-Dquarkus.http.test-port=0";
     private static final String RANDOM_PORT_FOR_TESTS_LAMBDA = "-Dquarkus.lambda.mock-event-server.test-port=0";
     private static final String RANDOM_PORT_FOR_RUNNING = "-Dquarkus.http.port=0";
-    private static final String XMX_MEMORY_LIMIT = "-Dquarkus.native.native-image-xmx=4g";
+    private static final String XMX_MEMORY_LIMIT = "-Dquarkus.native.native-image-xmx=6g";
 
     private final File output;
     private final Set<String> projectExtensions;
