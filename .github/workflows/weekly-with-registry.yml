@@ -11,7 +11,7 @@ jobs:
       TESTCONTAINERS_RYUK_DISABLED: true
     strategy:
       matrix:
-        java: [ 17 ]
+        java: [ 17, 21 ]
     steps:
       - uses: actions/checkout@v4
       - name: Install JDK ${{ matrix.java }}
@@ -40,7 +40,7 @@ jobs:
       TESTCONTAINERS_RYUK_DISABLED: true
     strategy:
       matrix:
-        java: [ 17 ]
+        java: [ 21 ]
         graalvm-version: [ "mandrel-latest" ]
         graalvm-java-version: [ "21" ]
     steps:
