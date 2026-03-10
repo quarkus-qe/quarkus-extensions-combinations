@@ -1,9 +1,7 @@
-name: "Daily Build"
+name: "PR"
 on:
   pull_request:
   workflow_dispatch:
-  schedule:
-    - cron: '0 20 * * *'
 jobs:
   linux-build-released-jvm:
     name: Linux - JVM build - released Quarkus
