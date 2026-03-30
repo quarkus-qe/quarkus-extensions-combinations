@@ -30,7 +30,7 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: ci-artifacts
+          name: ci-artifacts-linux-jvm${{ matrix.java }}
           path: artifacts-linux-jvm${{ matrix.java }}.zip
   linux-build-released-native:
     name: Linux - Native build - released Quarkus
@@ -68,7 +68,7 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: ci-artifacts
+          name: ci-artifacts-linux-native${{ matrix.java }}
           path: artifacts-linux-native${{ matrix.java }}.zip
   windows-build-released-jvm:
     name: Windows - JVM build - released Quarkus
@@ -100,7 +100,7 @@ jobs:
         uses: actions/upload-artifact@v4
         if: failure()
         with:
-          name: ci-artifacts
+          name: ci-artifacts-windows-jvm${{ matrix.java }}
           path: artifacts-windows-jvm${{ matrix.java }}.tar
   windows-build-released-native:
     name: Windows - Native build - released Quarkus
@@ -152,5 +152,5 @@ jobs:
         uses: actions/upload-artifact@v4
         if: failure()
         with:
-          name: ci-artifacts
+          name: ci-artifacts-windows-native${{ matrix.java }}
           path: artifacts-windows-native${{ matrix.java }}.tar
