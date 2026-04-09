@@ -29,6 +29,7 @@ public class MavenGenerator extends MavenCommand {
     private static final String APPLICATION_PROPERTIES = RESOURCES_FOLDER + "/application" + PROPERTIES_FORMAT;
     private static final String OUTPUT_FOLDER = "target/";
     private static final String HIBERNATE_ORM_EXTENSION = "hibernate-orm";
+    private static final String HIBERNATE_PANACHE_EXTENSION = "hibernate-panache";
 
     private static final String EXTENSIONS_PARAM = "extensions";
 
@@ -99,7 +100,7 @@ public class MavenGenerator extends MavenCommand {
     }
 
     public void dropEntityAnnotations() {
-        if (withExtensions().contains(HIBERNATE_ORM_EXTENSION)) {
+        if (withExtensions().contains(HIBERNATE_ORM_EXTENSION) || withExtensions().contains(HIBERNATE_PANACHE_EXTENSION)) {
             File srcMainJava = new File(projectAsWorkingDirectory(), JAVA_FOLDER);
             try {
                 Files.walk(srcMainJava.toPath())
