@@ -20,6 +20,7 @@ jobs:
           java-version: ${{ matrix.java }}
           check-latest: true
           cache: 'maven'
+      - uses: ./.github/actions/use-docker-mirror
       - name: Run Test Suite
         run: mvn -ntp -s .github/mvn-settings.xml clean test -DquarkusRegistryClient=false -Dts.limit-extensions=200 -Dts.extensions-in-groups-of=2
       - name: Zip Artifacts
@@ -58,6 +59,7 @@ jobs:
           version: ${{ matrix.graalvm-version }}
           java-version: ${{ matrix.graalvm-java-version }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: ./.github/actions/use-docker-mirror
       - name: Run Test Suite
         run: mvn -ntp -e -s .github/mvn-settings.xml clean test -DquarkusRegistryClient=false -Dts.limit-extensions=20 -Dts.extensions-in-groups-of=5 -Dts.verify-native-mode=true -Ddisable-parallel
       - name: Zip Artifacts
