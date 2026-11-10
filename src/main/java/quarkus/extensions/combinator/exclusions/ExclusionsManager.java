@@ -2,13 +2,12 @@ package quarkus.extensions.combinator.exclusions;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import quarkus.extensions.combinator.utils.OsUtils;
 
@@ -24,11 +23,11 @@ public class ExclusionsManager {
     private static final String SKIP_TESTS_VALUE = "skip-tests";
     private static final String SKIP_TESTS_ON_WINDOWS = "skip-only-tests-on-windows";
 
-    private final List<Set<String>> skipCombinations = new ArrayList<>();
-    private final List<Set<String>> skipDevModeCombinations = new ArrayList<>();
-    private final List<Set<String>> skipNativeModeCombinations = new ArrayList<>();
-    private final List<Set<String>> skipTestsCombinations = new ArrayList<>();
-    private final List<Set<String>> skipTestsOnWindowsCombinations = new ArrayList<>();
+    private final List<ExclusionRule> skipCombinations = new ArrayList<>();
+    private final List<ExclusionRule> skipDevModeCombinations = new ArrayList<>();
+    private final List<ExclusionRule> skipNativeModeCombinations = new ArrayList<>();
+    private final List<ExclusionRule> skipTestsCombinations = new ArrayList<>();
+    private final List<ExclusionRule> skipTestsOnWindowsCombinations = new ArrayList<>();
 
     private ExclusionsManager() {
         initializeExclusions();
@@ -36,28 +35,28 @@ public class ExclusionsManager {
 
     public boolean isNotExcluded(Set<String> combination) {
         return skipCombinations.isEmpty()
-                || !skipCombinations.stream().anyMatch(excluded -> combination.containsAll(excluded));
+                || !skipCombinations.stream().anyMatch(excluded -> excluded.matches(combination));
     }
 
     public boolean isDevModeDisabled(Set<String> combination) {
         return !skipDevModeCombinations.isEmpty()
-                && skipDevModeCombinations.stream().anyMatch(excluded -> combination.containsAll(excluded));
+                && skipDevModeCombinations.stream().anyMatch(excluded -> excluded.matches(combination));
     }
 
     public boolean isNativeModeDisabled(Set<String> combination) {
         return !skipNativeModeCombinations.isEmpty()
-                && skipNativeModeCombinations.stream().anyMatch(excluded -> combination.containsAll(excluded));
+                && skipNativeModeCombinations.stream().anyMatch(excluded -> excluded.matches(combination));
     }
 
     public boolean isTestsDisabled(Set<String> combination) {
         return !skipTestsCombinations.isEmpty()
-                && skipTestsCombinations.stream().anyMatch(excluded -> combination.containsAll(excluded));
+                && skipTestsCombinations.stream().anyMatch(excluded -> excluded.matches(combination));
     }
 
     public boolean isTestsDisabledOnWindows(Set<String> combination) {
         return !skipTestsOnWindowsCombinations.isEmpty()
                 && OsUtils.isWindows()
-                && skipTestsOnWindowsCombinations.stream().anyMatch(excluded -> combination.containsAll(excluded));
+                && skipTestsOnWindowsCombinations.stream().anyMatch(excluded -> excluded.matches(combination));
     }
 
     private final List<Set<String>> initializeExclusions() {
@@ -69,17 +68,17 @@ public class ExclusionsManager {
             prop.load(input);
             for (Map.Entry<Object, Object> entry : prop.entrySet()) {
                 String rule = (String) entry.getValue();
-                Set<String> combination = Stream.of(((String) entry.getKey()).split(",")).collect(Collectors.toSet());
+                ExclusionRule exclusionRule = new ExclusionRule(Arrays.asList(((String) entry.getKey()).split(",")));
                 if (SKIP_ALL_VALUE.equalsIgnoreCase(rule)) {
-                    skipCombinations.add(combination);
+                    skipCombinations.add(exclusionRule);
                 } else if (SKIP_DEV_MODE_VALUE.equalsIgnoreCase(rule)) {
-                    skipDevModeCombinations.add(combination);
+                    skipDevModeCombinations.add(exclusionRule);
                 } else if (SKIP_NATIVE_MODE_VALUE.equalsIgnoreCase(rule)) {
-                    skipNativeModeCombinations.add(combination);
+                    skipNativeModeCombinations.add(exclusionRule);
                 } else if (SKIP_TESTS_VALUE.equalsIgnoreCase(rule)) {
-                    skipTestsCombinations.add(combination);
+                    skipTestsCombinations.add(exclusionRule);
                 } else if (SKIP_TESTS_ON_WINDOWS.equalsIgnoreCase(rule)) {
-                    skipTestsOnWindowsCombinations.add(combination);
+                    skipTestsOnWindowsCombinations.add(exclusionRule);
                 }
             }
 
